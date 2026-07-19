@@ -1,6 +1,7 @@
 import type { MovieData } from "~/types";
 import { IoMdStar } from "react-icons/io";
 import { Link } from "react-router";
+import { motion } from "motion/react";
 
 function MovieCard({ movie, type }: { movie: MovieData; type: string }) {
   const image_url = `https://image.tmdb.org/t/p/original${movie.poster_path}`;
@@ -27,7 +28,11 @@ function MovieCard({ movie, type }: { movie: MovieData; type: string }) {
   return (
     <>
       <Link to={`/${type}/${movie.id}`}>
-        <div className="relative w-45 rounded-lg border border-white/10 hover:scale-[1.05] duration-400 ease-in-out">
+        <motion.div
+          whileHover={{ scale: 1.03 }}
+          transition={{ duration: 0.35, ease: "easeInOut" }}
+          className="relative w-45 rounded-lg border border-white/10"
+        >
           {/* movie tag */}
           <div className="top-2 left-2 absolute px-1.5 py-0.75 text-[9px] font-extrabold shadow rounded-xs uppercase bg-red-600 text-white tracking-widest">
             {mediaType === "TV Show" ? "series" : "movie"}
@@ -60,7 +65,7 @@ function MovieCard({ movie, type }: { movie: MovieData; type: string }) {
               {mediaType.length > 1 ? mediaType : "Movie"}
             </p>
           </div>
-        </div>
+        </motion.div>
       </Link>
     </>
   );

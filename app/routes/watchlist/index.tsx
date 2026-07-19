@@ -1,12 +1,24 @@
+import ContentGrid from "~/components/ContentGrid";
+import { useWatchList } from "~/context/WatchlistContext";
+
 function WatchlistPage() {
+  const { watchList } = useWatchList();
   return (
-    <div className="min-h-screen w-full">
-      <div className="max-w-3xl mx-auto p-4 mt-22">
-        <h2 className="text-bold text-white text-3xl">Sorry!</h2>
-        <p className="mt-2 text-gray-300 text-md">
-          This function is currently unavailable right now!
-        </p>
+    <div className="p-4 min-h-screen w-full">
+      {/* heading */}
+      <div className="border-b border-white/10 py-6 px-3 mb-5">
+        <h2 className="font-bold text-3xl text-white border-l-4 border-red-500 px-2">
+          My WatchList
+        </h2>
       </div>
+      {/* grid section */}
+      {watchList.length === 0 ? (
+        <div className="text-center text-gray-300 font-semibold text-sm">
+          Watchlist is empty!
+        </div>
+      ) : (
+        <ContentGrid data={watchList} />
+      )}
     </div>
   );
 }

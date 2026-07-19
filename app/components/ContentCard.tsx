@@ -62,7 +62,7 @@ function ContentCard({ data }: { data: MovieData | TvShowsData }) {
 
           {/* rating tag */}
           <div
-            className={`top-2 right-2 absolute flex items-center gap-1 px-1.25 py-0.75 text-[11px] font-bold shadow-2xl rounded uppercase bg-slate-900/90 ${ratingColor} tracking-wider`}
+            className={`top-2 right-2 absolute flex items-center gap-1 px-1.25 py-0.75 text-[9px] sm:text-[11px] font-extrabold shadow-2xl rounded uppercase bg-slate-900/90 ${ratingColor} tracking-wider`}
           >
             <IoMdStar />
             {Number(data.vote_average).toFixed(1)}

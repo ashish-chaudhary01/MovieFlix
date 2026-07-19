@@ -9,7 +9,6 @@ A modern movie and TV show discovery app built with React Router and TypeScript.
 - Explore detailed movie and series pages with cast and trailer information
 - Search movies and series instantly
 - Responsive UI with a clean, modern layout
-- Watchlist section placeholder for future development
 
 ## Tech Stack
 

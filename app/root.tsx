@@ -12,6 +12,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import Sidebar from "./components/layouts/Sidebar";
 import Footer from "./components/layouts/Footer";
+import WatchlistProvider from "./context/WatchlistContext";
 
 export const links: Route.LinksFunction = () => [
   { rel: "icon", href: "/favicon.png", type: "image/png" },
@@ -67,13 +68,15 @@ const queryClient = new QueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Sidebar />
-      <main className="min-h-screen pb-6 md:pl-21">
-        <Outlet />
-      </main>
-      <div className="md:pl-21 pb-16 md:pb-3">
-        <Footer />
-      </div>
+      <WatchlistProvider>
+        <Sidebar />
+        <main className="min-h-screen pb-6 md:pl-21">
+          <Outlet />
+        </main>
+        <div className="md:pl-21 pb-16 md:pb-3">
+          <Footer />
+        </div>
+      </WatchlistProvider>
     </QueryClientProvider>
   );
 }

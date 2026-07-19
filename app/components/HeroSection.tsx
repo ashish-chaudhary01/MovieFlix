@@ -7,10 +7,14 @@ import { RxDotFilled } from "react-icons/rx";
 import { Link } from "react-router";
 import { FaRegBookmark } from "react-icons/fa";
 import { FaPlay } from "react-icons/fa";
+import { useWatchList } from "~/context/WatchlistContext";
+import { MdBookmarkAdded } from "react-icons/md";
 
 function HeroSection({ movies }: { movies: MovieData[] }) {
   const herMovies = movies.slice(0, 8); //selecting trending 8 movies for hero section
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  // chaning hero section after every 6 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % herMovies.length);
@@ -42,6 +46,21 @@ function HeroSection({ movies }: { movies: MovieData[] }) {
   // goto slides function
   const goToSlide = (slideIdx: number) => {
     setCurrentIndex(slideIdx);
+  };
+
+  //global context
+  const { watchList, setWatchList } = useWatchList();
+  const isInWatchlist = watchList.some((item) => item.id === movie.id);
+
+  // handleclick function to add or remove from watchlist
+  const handleClick = () => {
+    setWatchList((prev) => {
+      const exists = prev.some((item) => item.id === movie.id);
+      if (exists) {
+        return prev.filter((item) => item.id !== movie.id);
+      }
+      return [movie, ...prev];
+    });
   };
 
   return (
@@ -110,17 +129,30 @@ function HeroSection({ movies }: { movies: MovieData[] }) {
           {movie.overview}
         </p>
         <div className="mt-8 flex gap-2 items-center">
-          <button className="py-2 px-8 rounded-lg bg-red-500 text-white font-bold hover:bg-red-600 border border-red-500 shadow-lg">
+          <button className="py-2 px-8 rounded-lg bg-red-500 text-white font-bold hover:bg-red-600 border-2 border-red-500 shadow-lg">
             <Link to={`/movie/${movie.id}`} className="flex items-center gap-2">
               <FaPlay size={18} />
               <span>Watch</span>
             </Link>
           </button>
-          <button className="group py-2 px-8 rounded-lg bg-white/10 backdrop-blur-md text-white font-bold border hover:border-red-500 shadow-lg duration-300">
-            <Link to="/watchlist" className="flex items-center gap-2">
-              <FaRegBookmark size={20} />
-              <span>WatchList</span>
-            </Link>
+          <button
+            type="button"
+            onClick={handleClick}
+            className={`group py-2 px-8 rounded-lg backdrop-blur-md text-white font-bold border-2 border-white/10  ${isInWatchlist ? "bg-red-500 hover:bg-red-600" : "bg-white/10 hover:bg-white/20"} shadow-lg duration-300`}
+          >
+            <span className="flex items-center gap-2">
+              {isInWatchlist ? (
+                <>
+                  <MdBookmarkAdded size={20} />
+                  <span>Added</span>
+                </>
+              ) : (
+                <>
+                  <FaRegBookmark size={20} />
+                  <span>WatchList</span>
+                </>
+              )}
+            </span>
           </button>
         </div>
       </div>

@@ -11,7 +11,9 @@ function Footer() {
           <p className="text-[#404040] text-xs">
             Developed by{" "}
             <span className="text-gray-400 font-semibold">
-              Ashish Chaudhary
+              <a href="https://github.com/ashish-chaudhary01" target="_blank">
+                Ashish Chaudhary
+              </a>
             </span>
           </p>
         </div>

@@ -24,7 +24,7 @@ function CastRow({ data }: { data: CastData[] }) {
   };
 
   return (
-    <section className="py-8 px-4 ">
+    <section className="py-8 px-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-primary text-lg md:text-xl font-bold px-3 tracking-wide leading-tight border-l-4 py-1 border-red-500 ">
           Top Cast
@@ -34,14 +34,14 @@ function CastRow({ data }: { data: CastData[] }) {
           {/* left scroll button */}
           <button
             onClick={scrollLeft}
-            className="w-8 h-8 text-xl text-gray-400 hover:text-white rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
+            className="cursor-pointer w-8 h-8 text-xl text-gray-400 hover:text-white rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
           >
             <MdOutlineKeyboardArrowLeft />
           </button>
           {/* right scroll button */}
           <button
             onClick={scrollRight}
-            className="w-8 h-8 text-xl text-gray-400 hover:text-white rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
+            className="cursor-pointer w-8 h-8 text-xl text-gray-400 hover:text-white rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
           >
             <MdOutlineKeyboardArrowRight />
           </button>
@@ -52,7 +52,7 @@ function CastRow({ data }: { data: CastData[] }) {
 
       <div
         ref={sliderRef}
-        className="flex overflow-x-auto scroll-smooth no-scrollbar gap-3 py-6"
+        className="flex overflow-x-auto scroll-smooth no-scrollbar gap-3 py-6 cursor-grab "
       >
         {data?.map((c: CastData) => (
           <CastCard key={c.id} data={c} />

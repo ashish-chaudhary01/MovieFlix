@@ -6,6 +6,10 @@ import { WiTime3 } from "react-icons/wi";
 import { FaArrowLeft } from "react-icons/fa";
 import { ClipLoader } from "react-spinners";
 import CastRow from "~/components/CastRow";
+import { FaRegBookmark } from "react-icons/fa";
+import { motion } from "motion/react";
+import { useWatchList } from "~/context/WatchlistContext";
+import { MdBookmarkAdded } from "react-icons/md";
 
 function MovieDetailsPage() {
   const params = useParams();
@@ -61,6 +65,21 @@ function MovieDetailsPage() {
   const movieTime = Number(movie.runtime);
   const hours = Math.floor(movieTime / 60);
   const minutes = movieTime % 60;
+
+  //global context
+  const { watchList, setWatchList } = useWatchList();
+  const isInWatchlist = watchList.some((item) => item.id === movie.id);
+
+  // handleclick function to add or remove from watchlist
+  const handleClick = () => {
+    setWatchList((prev) => {
+      const exists = prev.some((item) => item.id === movie.id);
+      if (exists) {
+        return prev.filter((item) => item.id !== movie.id);
+      }
+      return [movie, ...prev];
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background text-primary">
@@ -134,6 +153,27 @@ function MovieDetailsPage() {
             <p className="text-gray-300/90 md:text-lg max-w-2xl drop-shadow-md leading-relaxed">
               {movie.overview}
             </p>
+            {/* add to watchlist button */}
+            <motion.button
+              onClick={handleClick}
+              whileTap={{ scale: 0.7 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className={`mt-4 group py-2 px-8 rounded-lg backdrop-blur-md text-white font-bold border-2 border-white/10  ${isInWatchlist ? "bg-red-500 hover:bg-red-600" : "bg-white/10 hover:bg-white/20"} shadow-lg duration-300`}
+            >
+              <span className="flex items-center gap-2">
+                {isInWatchlist ? (
+                  <>
+                    <MdBookmarkAdded size={20} />
+                    <span>Added</span>
+                  </>
+                ) : (
+                  <>
+                    <FaRegBookmark size={20} />
+                    <span>Add To WatchList</span>
+                  </>
+                )}
+              </span>
+            </motion.button>
           </div>
         </div>
       </div>
