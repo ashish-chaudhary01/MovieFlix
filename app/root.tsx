@@ -14,6 +14,8 @@ import Sidebar from "./components/layouts/Sidebar";
 import Footer from "./components/layouts/Footer";
 
 export const links: Route.LinksFunction = () => [
+  { rel: "icon", href: "/favicon.png", type: "image/png" },
+  { rel: "shortcut icon", href: "/favicon.png", type: "image/png" },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",
@@ -28,7 +30,7 @@ export const links: Route.LinksFunction = () => [
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Movies App" },
+    { title: "MovieFlix" },
     { name: "description", content: "search trending movies" },
   ];
 }
@@ -39,6 +41,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
         <Meta />
         <Links />
       </head>
