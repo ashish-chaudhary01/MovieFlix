@@ -29,8 +29,8 @@ function MovieCard({ movie, type }: { movie: MovieData; type: string }) {
     <>
       <Link to={`/${type}/${movie.id}`}>
         <motion.div
-          whileHover={{ scale: 1.03 }}
-          transition={{ duration: 0.35, ease: "easeInOut" }}
+          whileHover={{ scale: 1.05, border: "1.5px solid gray", opacity: 0.8 }}
+          transition={{ duration: 0.2, ease: "easeInOut" }}
           className="relative w-45 rounded-lg border border-white/10"
         >
           {/* movie tag */}

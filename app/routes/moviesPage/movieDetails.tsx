@@ -1,12 +1,11 @@
+import { useState } from "react";
 import { Link, useLocation, useParams } from "react-router";
 import { fetchMovieDetails } from "~/services/api";
 import { useQuery } from "@tanstack/react-query";
-import { FaRegCalendarAlt } from "react-icons/fa";
+import { FaRegCalendarAlt, FaArrowLeft, FaRegBookmark } from "react-icons/fa";
 import { WiTime3 } from "react-icons/wi";
-import { FaArrowLeft } from "react-icons/fa";
 import { ClipLoader } from "react-spinners";
 import CastRow from "~/components/CastRow";
-import { FaRegBookmark } from "react-icons/fa";
 import { motion } from "motion/react";
 import { useWatchList } from "~/context/WatchlistContext";
 import { MdBookmarkAdded } from "react-icons/md";
@@ -14,15 +13,18 @@ import { MdBookmarkAdded } from "react-icons/md";
 function MovieDetailsPage() {
   const params = useParams();
   const location = useLocation();
+
   const routeId =
     params.id ?? location.pathname.split("/").filter(Boolean).pop();
   const movieId = routeId ? String(routeId) : undefined;
 
-  // taking out the path from which the user came from
   const state = (location.state as { from?: string } | null) ?? null;
   const from = state?.from ?? "/";
 
-  // query movie details
+  // for multiple server support
+  const [activeServer, setActiveServer] = useState<string>("vidnest");
+
+  //query
   const {
     data: movie,
     isLoading,
@@ -34,44 +36,33 @@ function MovieDetailsPage() {
     enabled: Boolean(movieId),
   });
 
-  //iamges url
-  const image_url = `https://image.tmdb.org/t/p/original${movie?.backdrop_path}`;
-  const poster_url = `https://image.tmdb.org/t/p/original${movie?.poster_path}`;
+  //watchlist context
+  const { watchList, setWatchList } = useWatchList();
 
-  // loading state
-  if (isLoading) {
-    return (
-      <div className="h-screen flex justify-center items-center">
-        <ClipLoader color="red" />
-      </div>
-    );
-  }
+  //checking if the movie is already in watchlist or not
+  const isInWatchlist = watchList.some((item) => item.id === movie?.id);
 
-  if (isError) {
-    return (
-      <div className="text-white">
-        {error instanceof Error
-          ? error.message
-          : "Failed to load movie details"}
-      </div>
-    );
-  }
+  //images url
+  const image_url = movie
+    ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
+    : "";
+  const poster_url = movie
+    ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+    : "";
 
-  if (!movie) {
-    return <div className="text-white">No movie details found.</div>;
-  }
-
-  // movies hours and minutes
-  const movieTime = Number(movie.runtime);
+  // movie playtime
+  const movieTime = movie ? Number(movie.runtime) : 0;
   const hours = Math.floor(movieTime / 60);
   const minutes = movieTime % 60;
 
-  //global context
-  const { watchList, setWatchList } = useWatchList();
-  const isInWatchlist = watchList.some((item) => item.id === movie.id);
+  //servers for movie and tv shows streaming
+  const serverUrls: Record<string, string> = {
+    vidnest: `https://vidnest.fun/movie/${movie?.id}`,
+  };
 
-  // handleclick function to add or remove from watchlist
+  // handleClick function to add in watchlist or remove from watchlist
   const handleClick = () => {
+    if (!movie) return;
     setWatchList((prev) => {
       const exists = prev.some((item) => item.id === movie.id);
       if (exists) {
@@ -81,9 +72,28 @@ function MovieDetailsPage() {
     });
   };
 
+  //loading and error conditional statements
+  if (isLoading) {
+    return (
+      <div className="h-screen flex justify-center items-center bg-background">
+        <ClipLoader color="red" />
+      </div>
+    );
+  }
+
+  if (isError || !movie) {
+    return (
+      <div className="h-screen flex justify-center items-center text-white bg-background">
+        {error instanceof Error
+          ? error.message
+          : "Failed to load movie details"}
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background text-primary">
-      {/* background image container */}
+      {/* Background image container */}
       <div className="relative pt-32 pb-20 w-full min-h-[70vh]">
         <div className="absolute overflow-hidden z-0 inset-0">
           <img
@@ -95,36 +105,36 @@ function MovieDetailsPage() {
           <div className="absolute inset-0 bg-linear-to-r from-[#07080a]/90 to-transparent"></div>
           <div className="absolute inset-0 bg-linear-to-b from-transparent to-[#07080a]/90"></div>
         </div>
-        {/* back button */}
-        <div className="absolute z-100 top-0 left-0 right-0 pt-10 pl-5 md:pl-15 pb-5">
+
+        <div className="absolute z-50 top-0 left-0 right-0 pt-10 pl-5 md:pl-15 pb-5">
           <Link
             className="group rounded-full px-6 py-2.5 bg-black/55 border border-white/20 text-sm font-semibold text-gray-200 inline-flex gap-2 items-center shadow-sm hover:shadow-md"
             to={from}
           >
             <FaArrowLeft
               size={15}
-              className="transform group-hover:-translate-x-1.5 duration-300 drop-shadow-md"
+              className="transform group-hover:-translate-x-1.5 duration-300"
             />
             Back
           </Link>
         </div>
 
-        {/* movie description */}
-        <div className="relative z-50 h-full flex flex-col md:flex-row py-20 items-end gap-8 px-6 md:px-12 lg:px-16">
+        {/* Movie Description */}
+        <div className="relative z-40 h-full flex flex-col md:flex-row py-20 items-end gap-8 px-6 md:px-12 lg:px-16">
           <img
             src={poster_url}
             alt={movie.title}
-            className="hidden md:block w-48 h-75 lg:w-64 lg:h-90 z-10 rounded-2xl shrink-0 object-fill border border-white/10"
+            className="hidden md:block w-48 h-75 lg:w-64 lg:h-90 rounded-2xl shrink-0 object-fill border border-white/10"
           />
           <div className="max-w-3xl flex-1">
-            <p className="uppercase text-xs md:text-sm text-red-400 mb-1 font-bold drop-shadow-md">
+            <p className="uppercase text-xs md:text-sm text-red-400 mb-1 font-bold">
               {movie.tagline}
             </p>
-            <h1 className="text-4xl drop-shadow-2xl tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-2">
+            <h1 className="text-4xl tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-2">
               {movie.title}
             </h1>
-            {/* release year timing and rating container */}
-            <div className="flex flex-wrap items-center gap-4 text-sx font-medium text-gray-300 drop-shadow-md mb-4">
+
+            <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-gray-300 mb-4">
               <span className="flex gap-1.5 items-center">
                 <FaRegCalendarAlt size={13} />{" "}
                 {new Date(movie.release_date).getFullYear()}
@@ -132,44 +142,39 @@ function MovieDetailsPage() {
               <span className="flex gap-1.5 items-center">
                 <WiTime3 size={18} /> {`${hours}h ${minutes}m`}
               </span>
-              <span className="flex gap-1.5 items-center">
-                ⭐ {Number(movie.vote_average).toFixed(1)}
-              </span>
+              <span>⭐ {Number(movie.vote_average).toFixed(1)}</span>
             </div>
-            {/* genres container*/}
+
             <div className="flex flex-wrap gap-4 mb-4">
-              {movie.genres.map(
+              {movie.genres?.map(
                 (genre: { id: string; name: string }, idx: number) => (
                   <span
                     key={idx}
-                    className="text-xs text-gray-200 font-semibold bg-white/10 hover:bg-white/20 rounded-full px-3 py-1 border border-white/10 backdrop-blur-sm shadow transition-colors"
+                    className="text-xs text-gray-200 font-semibold bg-white/10 rounded-full px-3 py-1 border border-white/10"
                   >
                     {genre.name}
                   </span>
                 ),
               )}
             </div>
-            {/* movie overview */}
-            <p className="text-gray-300/90 md:text-lg max-w-2xl drop-shadow-md leading-relaxed">
+            <p className="text-gray-300/90 md:text-lg max-w-2xl leading-relaxed">
               {movie.overview}
             </p>
-            {/* add to watchlist button */}
+
             <motion.button
               onClick={handleClick}
               whileTap={{ scale: 0.7 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className={`mt-4 group py-2 px-8 rounded-lg backdrop-blur-md text-white font-bold border-2 border-white/10  ${isInWatchlist ? "bg-red-500 hover:bg-red-600" : "bg-white/10 hover:bg-white/20"} shadow-lg duration-300`}
+              transition={{ duration: 0.3 }}
+              className={`mt-4 py-2 px-8 rounded-lg text-white font-bold border-2 border-white/10 ${isInWatchlist ? "bg-red-500 hover:bg-red-600" : "bg-white/10 hover:bg-white/20"} cursor-pointer duration-300`}
             >
               <span className="flex items-center gap-2">
                 {isInWatchlist ? (
                   <>
-                    <MdBookmarkAdded size={20} />
-                    <span>Added</span>
+                    <MdBookmarkAdded size={20} /> Added
                   </>
                 ) : (
                   <>
-                    <FaRegBookmark size={20} />
-                    <span>Add To WatchList</span>
+                    <FaRegBookmark size={20} /> Add To WatchList
                   </>
                 )}
               </span>
@@ -178,18 +183,51 @@ function MovieDetailsPage() {
         </div>
       </div>
 
-      {/* trailers , cast cards and related contentcards */}
-      {movie.trailer && (
-        <div className="pt-8 pb-10 px-8 sm:px-12 md:px-14 lg:px-16 w-full flex justify-center items-center">
+      {/* 3. Streaming Player Section with Server Tabs */}
+      <div className="relative px-6 sm:px-14 lg:px-16 py-10 max-w-7xl mx-auto">
+        <div className="flex flex-wrap gap-2 mb-4 bg-black/40 p-2 rounded-xl border border-white/5">
+          <span className="text-gray-400 self-center mr-2 text-sm font-semibold">
+            Sources:
+          </span>
+          {Object.keys(serverUrls).map((server) => (
+            <button
+              key={server}
+              onClick={() => setActiveServer(server)}
+              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+                activeServer === server
+                  ? "bg-red-600 text-white"
+                  : "bg-white/10 text-gray-400 hover:bg-white/20 hover:text-white"
+              }`}
+            >
+              {server.toUpperCase()}
+            </button>
+          ))}
+        </div>
+
+        <div className="w-full relative aspect-video rounded-2xl overflow-hidden border-2 border-white/10 shadow-2xl bg-black">
           <iframe
-            className="aspect-video rounded-2xl shadow-2xl border-2 border-white/10"
+            src={serverUrls[activeServer]}
+            className="absolute top-0 left-0 w-full h-full"
+            allowFullScreen
+          ></iframe>
+        </div>
+      </div>
+
+      {/* YouTube Trailers */}
+      {/* {movie.trailer && (
+        <div className="pt-4 pb-10 px-8 max-w-5xl mx-auto flex flex-col justify-center">
+          <h3 className="text-white text-xl font-bold mb-4">
+            Official Trailer
+          </h3>
+          <iframe
+            className="aspect-video w-full rounded-2xl border-2 border-white/10"
             src={`https://www.youtube.com/embed/${movie.trailer.key}`}
             allowFullScreen
             title={movie.trailer.name}
           />
         </div>
-      )}
-      {/* cast row */}
+      )} */}
+
       {movie.cast && <CastRow data={movie.cast} />}
     </div>
   );

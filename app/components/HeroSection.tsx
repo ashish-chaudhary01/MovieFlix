@@ -83,6 +83,7 @@ function HeroSection({ movies }: { movies: MovieData[] }) {
       <div className="z-20 absolute bottom-5 right-0 left-0 flex justify-center items-center gap-2 p-2">
         {herMovies.map((item, idx) => (
           <div
+            key={idx}
             onClick={() => goToSlide(idx)}
             className={`text-xl ${currentIndex === idx ? "text-red-500" : "text-white"} cursor-pointer `}
           >

@@ -54,7 +54,7 @@ function Sidebar() {
         <nav className="flex flex-col gap-4 px-3 items-center justify-center pb-25">
           {menuList.map((item) => (
             // adding NavLink component for active link
-            <NavLink to={item.link} className={`w-full`}>
+            <NavLink key={item.label} to={item.link} className={`w-full`}>
               {({ isActive }) => (
                 <button
                   title={item.label}
@@ -82,9 +82,9 @@ function Sidebar() {
 
       {/* mobile nav */}
 
-      <div className="md:hidden flex items-center z-50 justify-around fixed bottom-0 left-0 right-0 w-full bg-[#111111] border-t border-white/10 pt-2 px-2 pb-1">
+      <div className="md:hidden flex items-center z-999 justify-around fixed bottom-0 left-0 right-0 w-full bg-[#111111] border-t border-white/10 pt-2 px-2 pb-1">
         {menuList.map((item) => (
-          <NavLink to={item.link}>
+          <NavLink key={item.label} to={item.link}>
             {({ isActive }) => (
               <button
                 className={`flex flex-col gap-1 px-3 py-1.5 items-center font-semibold tracking-wide rounded-xl text-[30px] outline-none ${isActive ? "text-red-400 shadow-lg" : "text-gray-400 whitespace-nowrap hover:text-white duration-200"}`}

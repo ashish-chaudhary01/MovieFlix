@@ -34,7 +34,7 @@ function SeriesDetailsPage() {
   const image_url = `https://image.tmdb.org/t/p/original${series?.backdrop_path}`;
   const poster_url = `https://image.tmdb.org/t/p/original${series?.poster_path}`;
 
-  // loading state
+  // loading adn error states
   if (isLoading) {
     return (
       <div className="h-screen flex justify-center items-center">
@@ -56,11 +56,6 @@ function SeriesDetailsPage() {
   if (!series) {
     return <div className="text-white">No series details found.</div>;
   }
-
-  // movies hours and minutes
-  // const movieTime = Number(series.runtime);
-  // const hours = Math.floor(movieTime / 60);
-  // const minutes = movieTime % 60;
 
   return (
     <div className="min-h-screen bg-background text-primary">
