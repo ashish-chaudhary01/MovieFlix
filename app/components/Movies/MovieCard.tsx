@@ -25,9 +25,19 @@ function MovieCard({ movie, type }: { movie: MovieData; type: string }) {
   } else {
     var type = "movie";
   }
+
+  // slug for the url
+  const slug = movie.title
+    ? movie.title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-")
+    : "/";
+
   return (
     <>
-      <Link to={`/${type}/${movie.id}`}>
+      <Link to={`/${type}/${movie.id}/${slug}`}>
         <motion.div
           whileHover={{ scale: 1.05, border: "1.5px solid gray", opacity: 0.8 }}
           transition={{ duration: 0.2, ease: "easeInOut" }}

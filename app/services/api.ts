@@ -342,6 +342,7 @@ export async function fetchSeriesDetails(id?: string) {
   if (!res.ok) throw new Error("Failed To fetch Series details");
 
   const data = await res.json();
+
   const trailer = data.videos.results.find(
     (v: Trailer) => v.type === "Trailer" && v.site === "YouTube",
   );
@@ -357,7 +358,7 @@ export async function fetchSeriesDetails(id?: string) {
 
   return {
     id: data.id,
-    name: data.title,
+    name: data.name,
     tagline: data.tagline,
     poster_path: data.poster_path,
     backdrop_path: data.backdrop_path,
@@ -365,7 +366,8 @@ export async function fetchSeriesDetails(id?: string) {
     overview: data.overview,
     first_air_date: data.first_air_date,
     number_of_episodes: data.number_of_episodes,
-    number_of_season: data.number_of_season,
+    number_of_seasons: data.number_of_seasons,
+    seasons: data.seasons,
     genres: data.genres ?? [],
 
     trailer: trailer
@@ -381,3 +383,25 @@ export async function fetchSeriesDetails(id?: string) {
     cast: cast,
   } as SeriesDetails;
 }
+
+// details of series season and its episodes
+// use if you want to show the episodes details
+// export async function fetchSeasonDetails(
+//   id?: string,
+//   seasonNumber?: string | number,
+// ) {
+//   if (!id) throw new Error("series id is missing");
+
+//   const res = await fetch(`${API_URL}/tv/${id}/season/${seasonNumber}`, {
+//     headers: {
+//       Authorization: `Bearer ${API_TOKEN}`,
+//       Accept: "application/json",
+//     },
+//   });
+
+//   if (!res.ok) throw new Error("Failed To fetch Series details");
+
+//   const data = await res.json();
+
+//   return data.episodes;
+// }

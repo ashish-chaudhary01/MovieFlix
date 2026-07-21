@@ -66,8 +66,9 @@ export type SeriesDetails = {
   backdrop_path: string;
   vote_average: string;
   first_air_date: string;
-  number_of_season: string;
+  number_of_seasons: string;
   number_of_episodes: string;
+  seasons: [];
   genres: [];
   trailer?: Trailer;
   cast?: CastData[];

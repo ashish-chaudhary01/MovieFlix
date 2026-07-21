@@ -28,6 +28,15 @@ function HeroSection({ movies }: { movies: MovieData[] }) {
   if (!movie) return null;
   const image_url = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
 
+  // slug for the url
+  const slug = movie.title
+    ? movie.title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-")
+    : "/";
+
   // genres query
   const { data: genresList } = useQuery({
     queryKey: ["genres-list"],
@@ -131,7 +140,10 @@ function HeroSection({ movies }: { movies: MovieData[] }) {
         </p>
         <div className="mt-8 flex gap-2 items-center">
           <button className="py-2 px-8 rounded-lg bg-red-500 text-white font-bold hover:bg-red-600 border-2 border-red-500 shadow-lg">
-            <Link to={`/movie/${movie.id}`} className="flex items-center gap-2">
+            <Link
+              to={`/movie/${movie.id}/${slug}`}
+              className="flex items-center gap-2"
+            >
               <FaPlay size={18} />
               <span>Watch</span>
             </Link>

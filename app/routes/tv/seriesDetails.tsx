@@ -2,10 +2,14 @@ import { Link, useLocation, useParams } from "react-router";
 import { fetchSeriesDetails } from "~/services/api";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegCalendarAlt } from "react-icons/fa";
-import { WiTime3 } from "react-icons/wi";
 import { FaArrowLeft } from "react-icons/fa";
 import { ClipLoader } from "react-spinners";
 import CastRow from "~/components/CastRow";
+import { motion } from "motion/react";
+import { useWatchList } from "~/context/WatchlistContext";
+import { MdBookmarkAdded } from "react-icons/md";
+import { FaRegBookmark } from "react-icons/fa";
+import { useState } from "react";
 
 function SeriesDetailsPage() {
   const params = useParams();
@@ -17,6 +21,11 @@ function SeriesDetailsPage() {
   // taking out the path from which the user came from
   const state = (location.state as { from?: string } | null) ?? null;
   const from = state?.from ?? "/";
+
+  // for multiple server support
+  const [activeServer, setActiveServer] = useState<string>("vidnest");
+  const [season, setSeason] = useState(1);
+  const [episode, setEpisode] = useState(1);
 
   // query series details
   const {
@@ -30,11 +39,33 @@ function SeriesDetailsPage() {
     enabled: Boolean(seriesId),
   });
 
+  //watchlist context
+  const { watchList, setWatchList } = useWatchList();
+
+  //checking if the movie is already in watchlist or not
+  const isInWatchlist = watchList.some((item) => item.id === series?.id);
+
   //iamges url
   const image_url = `https://image.tmdb.org/t/p/original${series?.backdrop_path}`;
   const poster_url = `https://image.tmdb.org/t/p/original${series?.poster_path}`;
 
-  // loading adn error states
+  //servers for movie and tv shows streaming
+  const serverUrls: Record<string, string> = {
+    vidnest: `https://vidnest.fun/tv/${series?.id}/${season}/${episode}`,
+  };
+
+  // handleClick function to add in watchlist or remove from watchlist
+  const handleClick = () => {
+    if (!series) return;
+    setWatchList((prev) => {
+      if (isInWatchlist) {
+        return watchList.filter((item) => item.id !== series?.id);
+      }
+      return [series, ...prev];
+    });
+  };
+
+  // loading and error states
   if (isLoading) {
     return (
       <div className="h-screen flex justify-center items-center">
@@ -56,6 +87,13 @@ function SeriesDetailsPage() {
   if (!series) {
     return <div className="text-white">No series details found.</div>;
   }
+
+  // seasons of the tv shows
+  const seasons = series.seasons as {
+    season_number: number;
+    name: string;
+    episode_count: number;
+  }[];
 
   return (
     <div className="min-h-screen bg-background text-primary">
@@ -129,11 +167,112 @@ function SeriesDetailsPage() {
             <p className="text-gray-300/90 md:text-lg max-w-2xl drop-shadow-md leading-relaxed">
               {series.overview}
             </p>
+            {/* watchlist button */}
+            <motion.button
+              onClick={handleClick}
+              whileTap={{ scale: 0.7 }}
+              transition={{ duration: 0.3 }}
+              className={`mt-4 py-2 px-8 rounded-lg text-white font-bold border-2 border-white/10 ${isInWatchlist ? "bg-red-500 hover:bg-red-600" : "bg-white/10 hover:bg-white/20"} cursor-pointer duration-300`}
+            >
+              <span className="flex items-center gap-2">
+                {isInWatchlist ? (
+                  <>
+                    <MdBookmarkAdded size={20} /> Added
+                  </>
+                ) : (
+                  <>
+                    <FaRegBookmark size={20} /> Add To WatchList
+                  </>
+                )}
+              </span>
+            </motion.button>
           </div>
         </div>
       </div>
 
-      {/* trailers , cast cards and related contentcards */}
+      {/*  Streaming Player Section with Server Tabs */}
+      <div className="relative px-6 sm:px-14 lg:px-16 py-10 max-w-7xl mx-auto">
+        <div className="flex flex-wrap gap-2 mb-4 bg-black/40 p-2 rounded-xl border border-white/5">
+          <span className="text-gray-400 self-center mr-2 text-sm font-semibold">
+            Sources:
+          </span>
+          {Object.keys(serverUrls).map((server) => (
+            <button
+              key={server}
+              onClick={() => setActiveServer(server)}
+              className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+                activeServer === server
+                  ? "bg-red-600 text-white"
+                  : "bg-white/10 text-gray-400 hover:bg-white/20 hover:text-white"
+              }`}
+            >
+              {server.toUpperCase()}
+            </button>
+          ))}
+        </div>
+
+        <div className="w-full relative aspect-video rounded-2xl overflow-hidden border-2 border-white/10 shadow-2xl bg-black">
+          <iframe
+            src={serverUrls[activeServer]}
+            className="absolute top-0 left-0 w-full h-full"
+            allowFullScreen
+          ></iframe>
+        </div>
+
+        {/* season and episode */}
+        <div className="flex gap-2 mt-4 p-2">
+          <div>
+            <select
+              name="Season"
+              id="Season"
+              value={season}
+              onChange={(e) => {
+                setSeason(Number(e.target.value));
+                setEpisode(1);
+              }}
+              className="text-white bg-red-500 outline-none border-none px-1.5 py-0.75 font-semibold target:bg-black"
+            >
+              {seasons.map((s) => (
+                <option
+                  key={s.season_number}
+                  value={s.season_number}
+                  className="bg-black text-white"
+                >
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <select
+              name="Episodes"
+              id="Episodes"
+              value={episode}
+              onChange={(e) => setEpisode(Number(e.target.value))}
+              className="text-white bg-red-500 outline-none border-none px-1.5 py-0.75 font-semibold target:bg-black"
+            >
+              {Array.from(
+                {
+                  length:
+                    seasons.find((s) => s.season_number === season)
+                      ?.episode_count || 0,
+                },
+                (_, i) => (
+                  <option
+                    key={i + 1}
+                    value={i + 1}
+                    className="bg-black text-white"
+                  >
+                    Episode {i + 1}
+                  </option>
+                ),
+              )}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* trailers , cast cards and related contentcards
       {series.trailer && (
         <div className="pt-8 pb-10 px-8 sm:px-12 md:px-14 lg:px-16 w-full flex justify-center items-center">
           <iframe
@@ -143,7 +282,7 @@ function SeriesDetailsPage() {
             title={series.trailer.name}
           />
         </div>
-      )}
+      )} */}
       {/* cast row */}
       {series.cast && <CastRow data={series.cast} />}
     </div>

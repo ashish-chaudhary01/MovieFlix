@@ -43,11 +43,22 @@ function ContentCard({ data }: { data: MovieData | TvShowsData }) {
   } else {
     var type = "movie";
   }
-  // animate-[animatecard_0.3s_ease-out_both] hover:scale-[1.05] duration-400 ease-in-out
+
+  // slug for the url
+  const slug = data.title
+    ? data.title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-")
+    : "/";
 
   return (
     <>
-      <Link to={`/${type}/${data.id}`} state={{ from: location.pathname }}>
+      <Link
+        to={`/${type}/${data.id}/${slug}`}
+        state={{ from: location.pathname }}
+      >
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
