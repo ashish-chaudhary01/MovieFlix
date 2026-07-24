@@ -10,6 +10,19 @@ import type {
   TvShowsData,
 } from "~/types";
 
+// header
+const header = {
+  Authorization: `Bearer ${API_TOKEN}`,
+  Accept: "application/json",
+};
+
+// helper function
+async function apiFetch<T>(endpoints: string): Promise<T> {
+  const res = await fetch(`${API_URL}${endpoints}`, { headers: header });
+
+  if (!res.ok) throw new Error(`Request Failed ${res.status}`);
+}
+
 //trending movies
 export async function fetchTrendingMovies() {
   const res = await fetch(`${API_URL}/trending/movie/day`, {
@@ -38,9 +51,9 @@ export async function fetchTrendingMovies() {
 }
 
 // top 20 trending movies this week
-export async function fetchTrendingThisWeekMovies(page: number) {
+export async function fetchTrendingThisWeekMovies(pageParam: number) {
   const res = await fetch(
-    `${API_URL}/trending/movie/week?language=en-US&page=${page}`,
+    `${API_URL}/trending/movie/week?language=en-US&page=${pageParam}`,
     {
       headers: {
         Authorization: `Bearer ${API_TOKEN}`,
@@ -64,7 +77,11 @@ export async function fetchTrendingThisWeekMovies(page: number) {
     media_type: movie.media_type,
   }));
 
-  return trendingMovieThisWeek;
+  return {
+    results: trendingMovieThisWeek,
+    page: data.page,
+    total_pages: data.total_pages,
+  };
 }
 
 // top-rated movies

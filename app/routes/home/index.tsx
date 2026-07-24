@@ -24,10 +24,17 @@ function HomePage() {
   });
 
   // trending movies this week query
-  const { data: trendingMoviesThisWeek = [] } = useQuery({
-    queryKey: ["trendingThisWeek-movies"],
+  const {
+    data: trendingMoviesThisWeekData,
+    isLoading: isTrendingThisWeekLoading,
+    isError: isTrendingThisWeekError,
+    error: trendingThisWeekError,
+  } = useQuery({
+    queryKey: ["trending-this-week-home"],
     queryFn: () => fetchTrendingThisWeekMovies(1),
   });
+
+  const trendingThisWeekMovies = trendingMoviesThisWeekData?.results ?? [];
 
   // top-rated movies query
   const { data: TopRatedMovies = [] } = useQuery({
@@ -54,7 +61,7 @@ function HomePage() {
   });
 
   // loader
-  if (isLoading) {
+  if (isLoading && TrendingMovies.length === 0) {
     return (
       <div className="h-screen flex justify-center items-center">
         <ClipLoader color="red" />
@@ -64,6 +71,10 @@ function HomePage() {
   // error
   if (isError) {
     return <p>{error.message}</p>;
+  }
+
+  if (isTrendingThisWeekError) {
+    return <p>{trendingThisWeekError.message}</p>;
   }
 
   return (
@@ -78,7 +89,7 @@ function HomePage() {
       <MovieRow
         type="Movie"
         title="Top 20 Movies This Week"
-        movies={trendingMoviesThisWeek}
+        movies={trendingThisWeekMovies}
         link="/movies"
       />
       <MovieRow

@@ -1,54 +1,73 @@
 import { BiMoviePlay } from "react-icons/bi";
 import ContentGrid from "~/components/ContentGrid";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchTrendingThisWeekMovies } from "~/services/api";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { MovieData } from "~/types";
 import { ClipLoader } from "react-spinners";
 
 function MoviesPage() {
-  const [page, setPage] = useState(1);
-  const [movies, setMovies] = useState<MovieData[]>([]);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  // trending movies this week query
-  const { data: trendingMoviesThisWeek = [], isLoading } = useQuery({
-    queryKey: ["trendingThisWeek-movies", page],
-    queryFn: () => fetchTrendingThisWeekMovies(page),
+  // trending movies this week with infinite scroll query
+  const {
+    data: trendingMoviesThisWeek,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["trendingThisWeek-movies"],
+    queryFn: ({ pageParam }) =>
+      fetchTrendingThisWeekMovies(pageParam as number),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.page < lastPage.total_pages) {
+        return lastPage.page + 1;
+      }
+      return undefined;
+    },
   });
 
-  // storing existing data ids and filtering out the unique data from the next page
-  //  means if next page contains some data wwhich is already present in previous page it will be filterred out
-  useEffect(() => {
-    if (trendingMoviesThisWeek.length > 0) {
-      setMovies((prev) => {
-        const existingIds = new Set(prev.map((m) => m.id));
-        const newItems = trendingMoviesThisWeek.filter(
-          (m: MovieData) => !existingIds.has(m.id),
-        );
-        if (newItems.length === 0) return prev;
-        return [...prev, ...newItems];
+  // extracting movies data from query data and removing duplicates from later pages
+  const movies =
+    trendingMoviesThisWeek?.pages.reduce<MovieData[]>((acc, page) => {
+      page.results.forEach((movie: MovieData) => {
+        if (!acc.some((existingMovie) => existingMovie.id === movie.id)) {
+          acc.push(movie);
+        }
       });
-    }
-  }, [trendingMoviesThisWeek]);
+      return acc;
+    }, []) ?? [];
 
-  //scroll function for inifinite scroll triggers when the user scrolls in y direction
-  // increasing page state here for the next page data
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY + 100 >
-      document.body.offsetHeight
-    ) {
-      setPage((prev) => prev + 1);
-    }
-  };
-
-  // windows event listner for hitting the api for the new response when user scrolls down to the bottom
+  // intersection observer to trigger div and fetch next page
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+    const node = loadMoreRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+
+        if (entry?.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.1 },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <ClipLoader className="font-bold" color="red" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 bg-background text-primary min-h-screen">
@@ -70,11 +89,14 @@ function MoviesPage() {
       <div className="grow">
         <ContentGrid data={movies} />
       </div>
-      {/* loader */}
-      {isLoading && (
-        <div className="flex items-center justify-center pt-5 ">
-          <ClipLoader className="font-bold" color="red" />
-        </div>
+      {/* ref container and loader */}
+      <div ref={loadMoreRef} className="mt-6 flex items-center justify-center">
+        {isFetchingNextPage && <ClipLoader className="font-bold" color="red" />}
+      </div>
+      {isError && (
+        <p className="text-center text-red-400 mt-4">
+          Something went wrong while loading more movies.
+        </p>
       )}
     </div>
   );

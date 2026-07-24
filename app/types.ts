@@ -26,6 +26,8 @@ export type MovieData = {
   first_air_date?: string;
   genre_ids: string[];
   media_type: string;
+  page?: string;
+  total_pages?: string;
 };
 export type TvShowsData = {
   id: string;

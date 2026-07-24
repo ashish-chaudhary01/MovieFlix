@@ -5,8 +5,8 @@ import ContentCard from "./ContentCard";
 function ContentGrid({ data }: { data?: Array<MovieData | TvShowsData> }) {
   return (
     <div className="grid gap-3 sm:gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7">
-      {data?.map((item) => (
-        <ContentCard key={item.id} data={item} />
+      {data?.map((item, index) => (
+        <ContentCard key={`${item.id}-${index}`} data={item} />
       ))}
     </div>
   );
