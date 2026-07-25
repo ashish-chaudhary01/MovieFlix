@@ -51,7 +51,13 @@ function ContentCard({ data }: { data: Media }) {
         .replace(/[^a-z0-9\s-]/g, "")
         .trim()
         .replace(/\s+/g, "-")
-    : "/";
+    : data.name
+      ? data.name
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, "")
+          .trim()
+          .replace(/\s+/g, "-")
+      : "/";
 
   return (
     <>

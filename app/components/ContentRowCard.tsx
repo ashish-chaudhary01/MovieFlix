@@ -26,7 +26,13 @@ function ContentRowCard({ media, type }: { media: Media; type: string }) {
         .replace(/[^a-z0-9\s-]/g, "")
         .trim()
         .replace(/\s+/g, "-")
-    : "/";
+    : media.name
+      ? media.name
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, "")
+          .trim()
+          .replace(/\s+/g, "-")
+      : "/";
 
   return (
     <>
