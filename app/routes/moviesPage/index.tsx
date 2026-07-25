@@ -2,8 +2,8 @@ import { BiMoviePlay } from "react-icons/bi";
 import ContentGrid from "~/components/ContentGrid";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchTrendingThisWeekMovies } from "~/services/api";
-import { useEffect, useRef, useState } from "react";
-import type { MovieData } from "~/types";
+import { useEffect, useRef } from "react";
+import type { Media } from "~/types";
 import { ClipLoader } from "react-spinners";
 
 function MoviesPage() {
@@ -32,8 +32,8 @@ function MoviesPage() {
 
   // extracting movies data from query data and removing duplicates from later pages
   const movies =
-    trendingMoviesThisWeek?.pages.reduce<MovieData[]>((acc, page) => {
-      page.results.forEach((movie: MovieData) => {
+    trendingMoviesThisWeek?.pages.reduce<Media[]>((acc, page) => {
+      page.results.forEach((movie: Media) => {
         if (!acc.some((existingMovie) => existingMovie.id === movie.id)) {
           acc.push(movie);
         }

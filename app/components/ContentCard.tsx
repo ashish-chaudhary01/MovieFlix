@@ -1,10 +1,10 @@
 import { Link } from "react-router";
 import { IoMdStar } from "react-icons/io";
-import type { MovieData, TvShowsData } from "~/types";
+import type { Media } from "~/types";
 import { useLocation } from "react-router";
 import { motion } from "motion/react";
 
-function ContentCard({ data }: { data: MovieData | TvShowsData }) {
+function ContentCard({ data }: { data: Media }) {
   // using for dynamically sending the path to the content cards for back button
   const location = useLocation();
 
@@ -63,7 +63,7 @@ function ContentCard({ data }: { data: MovieData | TvShowsData }) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2, ease: "easeInOut" }}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.05, border: "1.5px solid gray", opacity: 0.8 }}
           className="relative w-full h-full rounded-lg border overflow-hidden shadow-[1px_1px_5px_rgba(0,0,0,0.3)] border-white/10"
         >
           {/* movie tag */}

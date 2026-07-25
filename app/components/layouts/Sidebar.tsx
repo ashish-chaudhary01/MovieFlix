@@ -4,7 +4,7 @@ import { BiMoviePlay } from "react-icons/bi";
 import { FiTv } from "react-icons/fi";
 import { IoSearch } from "react-icons/io5";
 import { FaRegBookmark } from "react-icons/fa";
-import { FaUserCircle } from "react-icons/fa";
+// import { FaUserCircle } from "react-icons/fa";
 import { NavLink, Link } from "react-router";
 
 const menuList = [
@@ -38,7 +38,7 @@ const menuList = [
 function Sidebar() {
   return (
     <>
-      <aside className="group hidden md:flex fixed top-0 left-0 z-999 w-21 hover:w-55 bg-[#111111] h-screen duration-300 flex-col justify-between border-r border-white/10">
+      <aside className="group hidden md:flex fixed top-0 left-0 z-999 w-21 hover:w-60 bg-[#111111] h-screen duration-300 flex-col justify-evenly border-r border-white/10">
         {/* header */}
         <div className="p-4">
           <Link to="/" className="flex items-center mt-4 gap-2">
@@ -69,7 +69,8 @@ function Sidebar() {
             </NavLink>
           ))}
         </nav>
-        <div className="flex gap-3 px-2 py-6 border-t border-white/10 whitespace-nowrap">
+        {/* user details */}
+        {/* <div className="flex gap-3 px-2 py-6 border-t border-white/10 whitespace-nowrap">
           <button className="flex items-center py-2.5 px-2 rounded-lg text-gray-300 hover:text-white text-3xl outline-none shrink-0">
             <FaUserCircle />
           </button>
@@ -77,7 +78,7 @@ function Sidebar() {
             <h2 className="text-xl text-gray-200">John Doe</h2>
             <p className="text-gray-300 text-sm">johndoe@example.com</p>
           </div>
-        </div>
+        </div> */}
       </aside>
 
       {/* mobile nav */}

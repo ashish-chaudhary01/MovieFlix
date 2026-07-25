@@ -2,12 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import ContentGrid from "~/components/ContentGrid";
 import { fetchAllTrending, fetchSearchResults } from "~/services/api";
-import type { MovieData } from "~/types";
+import type { Media } from "~/types";
 import { ClipLoader } from "react-spinners";
 
 function SearchPage() {
   const [search, setSearch] = useState<string>("");
-  const [results, setResults] = useState<MovieData[]>([]);
+  const [results, setResults] = useState<Media[]>([]);
   const [page, setPage] = useState(1);
 
   // reseting all states on every search
@@ -34,7 +34,7 @@ function SearchPage() {
     if (data.length > 0) {
       setResults((prev) => {
         const existingIds = new Set(prev.map((m) => m.id));
-        const newItems = data.filter((m: MovieData) => !existingIds.has(m.id));
+        const newItems = data.filter((m: Media) => !existingIds.has(m.id));
         if (newItems.length === 0) return prev;
         return [...prev, ...newItems];
       });

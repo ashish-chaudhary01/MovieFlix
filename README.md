@@ -2,6 +2,10 @@
 
 A modern movie and TV show discovery app built with React Router and TypeScript. The application lets users explore trending content, browse popular movies and series, search for titles, and open detailed information pages for each item.
 
+## Live Demo
+
+Visit the live site: https://movie-flix-ui.vercel.app/
+
 ## Features
 
 - Browse trending movies and TV shows

@@ -4,14 +4,14 @@ import { FiTv } from "react-icons/fi";
 import { fetchTrendingTvShows } from "~/services/api";
 import { useState, useEffect } from "react";
 import { ClipLoader } from "react-spinners";
-import type { TvShowsData } from "~/types";
+import type { Media } from "~/types";
 
 function TvShowsPage() {
   const [page, setPage] = useState(1);
-  const [tvShows, setTvShows] = useState<TvShowsData[]>([]);
+  const [tvShows, setTvShows] = useState<Media[]>([]);
 
   // trending tv shows query
-  const { data: trendingTvShows, isLoading } = useQuery({
+  const { data: trendingTvShows = [], isLoading } = useQuery({
     queryKey: ["tvShows", page],
     queryFn: () => fetchTrendingTvShows(page),
   });
@@ -23,7 +23,7 @@ function TvShowsPage() {
       setTvShows((prev) => {
         const existingIds = new Set(prev.map((m) => m.id));
         const newItems = trendingTvShows.filter(
-          (m: TvShowsData) => !existingIds.has(m.id),
+          (m: Media) => !existingIds.has(m.id),
         );
         if (newItems.length === 0) return prev;
         return [...prev, ...newItems];

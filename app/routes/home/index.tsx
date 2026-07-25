@@ -1,4 +1,3 @@
-import MovieRow from "~/components/MovieRow";
 import { useQuery } from "@tanstack/react-query";
 import { ClipLoader } from "react-spinners";
 import {
@@ -10,6 +9,7 @@ import {
   fetchAsianTvShows,
 } from "~/services/api";
 import HeroSection from "~/components/HeroSection";
+import ContentRow from "~/components/ContentRow";
 
 function HomePage() {
   // trending movies query
@@ -80,40 +80,40 @@ function HomePage() {
   return (
     <>
       <HeroSection movies={TrendingMovies} />
-      <MovieRow
+      <ContentRow
         type="Movie"
         title="Trending Movies"
-        movies={TrendingMovies}
+        media={TrendingMovies}
         link="/movies"
       />
-      <MovieRow
+      <ContentRow
         type="Movie"
         title="Top 20 Movies This Week"
-        movies={trendingThisWeekMovies}
+        media={trendingThisWeekMovies}
         link="/movies"
       />
-      <MovieRow
+      <ContentRow
         type="Movie"
         title="Top Rated Movies"
-        movies={TopRatedMovies}
+        media={TopRatedMovies}
         link="/movies"
       />
-      <MovieRow
+      <ContentRow
         type="Movie"
         title="Now Playing In Theater"
-        movies={nowPlaying}
+        media={nowPlaying}
         link="/movies"
       />
-      <MovieRow
+      <ContentRow
         type="Series"
         title="Asian TV Shows"
-        movies={asianTvShows}
+        media={asianTvShows}
         link="/tv"
       />
-      <MovieRow
+      <ContentRow
         type="Series"
         title="Trending TV Shows"
-        movies={trendingTvShows}
+        media={trendingTvShows}
         link="/tv"
       />
     </>

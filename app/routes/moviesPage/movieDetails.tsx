@@ -184,8 +184,8 @@ function MovieDetailsPage() {
       </div>
 
       {/* 3. Streaming Player Section with Server Tabs */}
-      <div className="relative px-6 sm:px-14 lg:px-16 py-10 max-w-7xl mx-auto">
-        <div className="flex flex-wrap gap-2 mb-4 bg-black/40 p-2 rounded-xl border border-white/5">
+      <div className="relative px-6 sm:px-14 lg:px-16 pb-10 max-w-7xl mx-auto">
+        <div className="flex flex-wrap gap-2 mb-4 p-2 rounded-xl">
           <span className="text-gray-400 self-center mr-2 text-sm font-semibold">
             Sources:
           </span>

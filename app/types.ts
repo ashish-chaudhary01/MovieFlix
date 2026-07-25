@@ -1,83 +1,110 @@
 // only use types when you are working with typescript not javascript
-// tv and movies response data is very similar if you want to use only the single responseType you can use the below one: this will work well
-// export type ResponseData = {
-//   id: string;
-//   title?: string;
-//   name?: string;
-//   poster_path: string;
-//   overview: string;
-//   backdrop_path: string;
-//   vote_average: string;
-//   release_date?: string;
-//   first_air_date?: string;
-//   genre_ids: string[];
-//   media_type: string;
-// };
 
-export type MovieData = {
-  id: string;
+// movies and series response from tmdb
+// like pages of movies and series response from tmdb
+export interface TMDBResponse {
+  page: number;
+  results: Media[];
+  total_pages: number;
+  total_results: number;
+}
+
+// return type for series and movies
+export interface Media {
+  id: number;
   title?: string;
   name?: string;
   poster_path: string;
   overview: string;
   backdrop_path: string;
-  vote_average: string;
+  vote_average: number;
   release_date?: string;
   first_air_date?: string;
-  genre_ids: string[];
-  media_type: string;
-  page?: string;
-  total_pages?: string;
-};
-export type TvShowsData = {
-  id: string;
-  title?: string;
-  name?: string;
-  poster_path: string;
-  overview: string;
-  backdrop_path: string;
-  vote_average: string;
-  release_date?: string;
-  first_air_date?: string;
-  genre_ids: string;
-  media_type: string;
-};
+  genre_ids: number[];
+  media_type?: "movie" | "tv";
+}
 
-export type MovieDetails = {
-  id: string;
+//tmdb movie details response type
+export interface TMDBMovie {
+  id: number;
   title: string;
   tagline: string;
   overview: string;
   poster_path: string;
   backdrop_path: string;
-  vote_average: string;
+  vote_average: number;
+  release_date: string;
+  runtime: string;
+  genres: Genre[];
+  videos: { results: Trailer[] };
+  credits: { cast: CastData[] };
+}
+
+// return type for movie details
+export interface MovieDetails {
+  id: number;
+  title: string;
+  tagline: string;
+  overview: string;
+  poster_path: string;
+  backdrop_path: string;
+  vote_average: number;
   release_date: string;
   runtime: string;
   genres: [];
   trailer?: Trailer;
   cast?: CastData[];
+}
+
+// seasons
+type Season = {
+  air_date: string;
+  episode_count: number;
+  id: number;
+  name: string;
+  poster_path: string;
+  season_number: number;
+  vote_average: number;
 };
 
-// tv show/series details type
-export type SeriesDetails = {
-  id: string;
+// tmdb series details response
+export interface TMDBSeries {
+  id: number;
   name: string;
   tagline: string;
   overview: string;
   poster_path: string;
   backdrop_path: string;
-  vote_average: string;
+  vote_average: number;
   first_air_date: string;
-  number_of_seasons: string;
-  number_of_episodes: string;
-  seasons: [];
-  genres: [];
+  number_of_seasons: number;
+  number_of_episodes: number;
+  seasons: Season[];
+  genres: Genre[];
+  videos: { results: Trailer[] };
+  credits: { cast: CastData[] };
+}
+
+// return type for series details
+export interface SeriesDetails {
+  id: number;
+  name: string;
+  tagline: string;
+  overview: string;
+  poster_path: string;
+  backdrop_path: string;
+  vote_average: number;
+  first_air_date: string;
+  number_of_seasons: number;
+  number_of_episodes: number;
+  seasons: Season[];
+  genres: Genre[];
   trailer?: Trailer;
   cast?: CastData[];
-};
+}
 
 // genre list type
-export type genreData = {
+export type Genre = {
   id: string;
   name: string;
 };

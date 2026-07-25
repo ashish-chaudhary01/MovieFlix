@@ -1,18 +1,18 @@
-import type { MovieData } from "~/types";
-import MovieCard from "./Movies/MovieCard";
+import type { Media } from "~/types";
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { useRef } from "react";
 import { Link } from "react-router";
+import ContentRowCard from "./ContentRowCard";
 
-function MovieRow({
+function ContentRow({
   title,
-  movies,
+  media,
   type,
   link,
 }: {
   title: string;
-  movies: MovieData[];
+  media: Media[];
   type: string;
   link: string;
 }) {
@@ -70,9 +70,9 @@ function MovieRow({
         ref={sliderRef}
         className="flex overflow-x-auto scroll-smooth no-scrollbar gap-3 py-6 px-2"
       >
-        {movies?.map((movie: MovieData) => (
+        {media?.map((media: Media) => (
           <>
-            <MovieCard key={movie.id} movie={movie} type={type} />
+            <ContentRowCard key={media.id} media={media} type={type} />
           </>
         ))}
       </div>
@@ -80,4 +80,4 @@ function MovieRow({
   );
 }
 
-export default MovieRow;
+export default ContentRow;

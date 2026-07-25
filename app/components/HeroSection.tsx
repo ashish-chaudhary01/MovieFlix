@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { MovieData } from "~/types";
+import type { Media } from "~/types";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { fetchGenresList } from "~/services/api";
@@ -10,7 +10,7 @@ import { FaPlay } from "react-icons/fa";
 import { useWatchList } from "~/context/WatchlistContext";
 import { MdBookmarkAdded } from "react-icons/md";
 
-function HeroSection({ movies }: { movies: MovieData[] }) {
+function HeroSection({ movies }: { movies: Media[] }) {
   const herMovies = movies.slice(0, 8); //selecting trending 8 movies for hero section
   const [currentIndex, setCurrentIndex] = useState(0);
 
