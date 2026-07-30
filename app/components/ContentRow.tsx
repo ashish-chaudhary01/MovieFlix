@@ -36,7 +36,7 @@ function ContentRow({
   return (
     <section className="py-8 px-4 ">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-primary text-md md:text-xl font-bold px-3 tracking-wide leading-tight border-l-4 py-1 border-red-500 ">
+        <h2 className="text-primary text-md md:text-xl font-bold px-3 tracking-wide leading-tight border-l-4 py-1 border-red-500 ml-2">
           {title}
         </h2>
 

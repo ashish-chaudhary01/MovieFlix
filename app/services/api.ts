@@ -148,12 +148,16 @@ export async function fetchGenresList(id?: string) {
 }
 
 // all trending movies or series for search page
-export async function fetchAllTrending(page: number) {
+export async function fetchAllTrending(type: string, page: number) {
   const data = await apiFetch<TMDBResponse>(
-    `/trending/all/day?language=en-US&page=${page}`,
+    `/trending/${type}/week?language=en-US&page=${page}`,
   );
   const trendingAll = data.results.map(mapMedia);
-  return trendingAll;
+  return {
+    results: trendingAll,
+    page: data.page,
+    total_pages: data.total_pages,
+  };
 }
 
 // search movies or tv shows
@@ -162,7 +166,11 @@ export async function fetchSearchResults(query: string, page: number) {
     `/search/multi?query=${encodeURIComponent(query)}&page=${page}`,
   );
   const searchData = data.results.map(mapMedia);
-  return searchData;
+  return {
+    results: searchData,
+    page: data.page,
+    total_pages: data.total_pages,
+  };
 }
 
 // series details
