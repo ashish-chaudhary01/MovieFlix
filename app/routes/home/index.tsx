@@ -49,10 +49,12 @@ function HomePage() {
   });
 
   // trending tv shows query
-  const { data: trendingTvShows = [] } = useQuery({
-    queryKey: ["tvShows"],
+  const { data: trendingTvShows } = useQuery({
+    queryKey: ["trending-tvShows"],
     queryFn: () => fetchTrendingTvShows(1),
   });
+
+  const trendingThisWeekTvShows = trendingTvShows?.results ?? [];
 
   // asian tv shows query
   const { data: asianTvShows = [] } = useQuery({
@@ -104,6 +106,11 @@ function HomePage() {
         media={nowPlaying}
         link="/movies"
       />
+      <div className="text-center text-xs text-gray-500 font-bold flex items-center justify-between">
+        <div className="flex-1 h-px bg-white/20 ml-10"></div>
+        <p className="px-3">TV SHOWS</p>
+        <div className="flex-1 h-px bg-white/20 mr-10"></div>
+      </div>
       <ContentRow
         type="Series"
         title="Asian TV Shows"
@@ -113,7 +120,7 @@ function HomePage() {
       <ContentRow
         type="Series"
         title="Trending TV Shows"
-        media={trendingTvShows}
+        media={trendingThisWeekTvShows}
         link="/tv"
       />
     </>

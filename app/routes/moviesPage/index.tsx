@@ -5,6 +5,7 @@ import { fetchTrendingThisWeekMovies } from "~/services/api";
 import { useEffect, useRef } from "react";
 import type { Media } from "~/types";
 import { ClipLoader } from "react-spinners";
+import SkeletonCard from "~/components/SkeletonCard";
 
 function MoviesPage() {
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
@@ -61,14 +62,6 @@ function MoviesPage() {
     return () => observer.disconnect();
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  if (isLoading) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <ClipLoader className="font-bold" color="red" />
-      </div>
-    );
-  }
-
   return (
     <div className="p-4 bg-background text-primary min-h-screen">
       {/* heading */}
@@ -85,10 +78,18 @@ function MoviesPage() {
           </p>
         </div>
       </div>
-      {/* content grid */}
-      <div className="grow">
-        <ContentGrid data={movies} />
-      </div>
+
+      {/* skeleton loading and content grid */}
+      {isLoading ? (
+        <div className="grid gap-3 sm:gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7">
+          <SkeletonCard />
+        </div>
+      ) : (
+        <div className="grow">
+          <ContentGrid data={movies} />
+        </div>
+      )}
+
       {/* ref container and loader */}
       <div ref={loadMoreRef} className="mt-6 flex items-center justify-center">
         {isFetchingNextPage && <ClipLoader className="font-bold" color="red" />}

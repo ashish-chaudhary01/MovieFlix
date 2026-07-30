@@ -4,17 +4,16 @@ import { Link } from "react-router";
 import { motion } from "motion/react";
 
 function ContentRowCard({ media, type }: { media: Media; type: string }) {
-  const image_url = `https://image.tmdb.org/t/p/original${media.poster_path}`;
+  const image_url = `https://image.tmdb.org/t/p/w500${media.poster_path}`;
 
+  // rating colors
   const rating = Number(Number(media.vote_average).toFixed(1));
-  let ratingColor = "";
-  if (rating >= 7) {
-    ratingColor = "text-green-400";
-  } else if (rating >= 5) {
-    ratingColor = "text-yellow-400";
-  } else {
-    ratingColor = "text-red-400";
-  }
+  const ratingColor =
+    rating >= 7
+      ? "text-green-400"
+      : rating >= 5
+        ? "text-yellow-400"
+        : "text-red-400";
 
   // for see all movies/series
   const redirect = type === "Movie" ? "movie" : "tv";
@@ -39,7 +38,7 @@ function ContentRowCard({ media, type }: { media: Media; type: string }) {
       <Link to={`/${redirect}/${media.id}/${slug}`}>
         <motion.div
           whileHover={{ scale: 1.05, border: "1.5px solid gray", opacity: 0.8 }}
-          transition={{ duration: 0.2, ease: "easeInOut" }}
+          transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
           className="relative w-45 rounded-lg border border-white/10"
         >
           {/* movie tag */}

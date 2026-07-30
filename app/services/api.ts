@@ -57,7 +57,6 @@ export async function fetchNowPlayingInTheatersMovies() {
   const data = await apiFetch<TMDBResponse>(
     "/movie/now_playing?language=en-US&page=1",
   );
-  const topRated = data.results.map(mapMedia);
   const nowPlaying = data.results.map(mapMedia);
   return nowPlaying;
 }
@@ -68,7 +67,11 @@ export async function fetchTrendingTvShows(page: number) {
     `/trending/tv/day?language=en-US&page=${page}`,
   );
   const trendingTvShows = data.results.map(mapMedia);
-  return trendingTvShows;
+  return {
+    results: trendingTvShows,
+    page: data.page,
+    total_pages: data.total_pages,
+  };
 }
 
 // asian tv shows

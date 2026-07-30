@@ -13,6 +13,8 @@ import "./app.css";
 import Sidebar from "./components/layouts/Sidebar";
 import Footer from "./components/layouts/Footer";
 import WatchlistProvider from "./context/WatchlistContext";
+import { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export const links: Route.LinksFunction = () => [
   { rel: "icon", href: "/favicon.png", type: "image/png" },
@@ -68,17 +70,19 @@ const queryClient = new QueryClient({
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <WatchlistProvider>
-        <Sidebar />
-        <main className="min-h-screen pb-6 md:pl-21">
-          <Outlet />
-        </main>
-        <div className="md:pl-21 pb-16 md:pb-3">
-          <Footer />
-        </div>
-      </WatchlistProvider>
-    </QueryClientProvider>
+    <SkeletonTheme baseColor="#1e293b" highlightColor="#334155">
+      <QueryClientProvider client={queryClient}>
+        <WatchlistProvider>
+          <Sidebar />
+          <main className="min-h-screen pb-6 md:pl-21">
+            <Outlet />
+          </main>
+          <div className="md:pl-21 pb-16 md:pb-3">
+            <Footer />
+          </div>
+        </WatchlistProvider>
+      </QueryClientProvider>
+    </SkeletonTheme>
   );
 }
 
