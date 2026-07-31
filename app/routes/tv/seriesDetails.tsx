@@ -3,13 +3,13 @@ import { fetchSeriesDetails } from "~/services/api";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { FaArrowLeft } from "react-icons/fa";
-import { ClipLoader } from "react-spinners";
 import CastRow from "~/components/CastRow";
 import { motion } from "motion/react";
 import { useWatchList } from "~/context/WatchlistContext";
 import { MdBookmarkAdded } from "react-icons/md";
 import { FaRegBookmark } from "react-icons/fa";
 import { useState } from "react";
+import { DetailsSkeleton } from "~/components/SkeletonCard";
 
 function SeriesDetailsPage() {
   const params = useParams();
@@ -67,11 +67,7 @@ function SeriesDetailsPage() {
 
   // loading and error states
   if (isLoading) {
-    return (
-      <div className="h-screen flex justify-center items-center">
-        <ClipLoader color="red" />
-      </div>
-    );
+    return <DetailsSkeleton />;
   }
 
   if (isError) {

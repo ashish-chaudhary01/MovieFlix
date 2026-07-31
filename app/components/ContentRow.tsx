@@ -44,6 +44,8 @@ function ContentRow({
     });
   };
 
+  console.log(sliderRef);
+
   return (
     <section className="py-8 px-4 ">
       <div className="flex justify-between items-center mb-4">
@@ -79,6 +81,7 @@ function ContentRow({
       <AnimatePresence mode="wait">
         {media.length === 0 ? (
           <motion.div
+            ref={sliderRef}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: easeInOut }}
             className="flex overflow-x-auto scroll-smooth no-scrollbar gap-3 py-6 px-2"

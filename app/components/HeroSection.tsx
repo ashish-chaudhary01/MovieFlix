@@ -86,7 +86,7 @@ function HeroSection({ movies }: { movies: Media[] }) {
         decoding="async"
         src={image_url}
         alt={movie.title}
-        className="absolute inset-0 h-full object-cover w-full"
+        className={`absolute inset-0 h-full object-cover w-full transition-opacity duration-400`}
       />
 
       {/* overlay divs */}
@@ -146,7 +146,7 @@ function HeroSection({ movies }: { movies: Media[] }) {
           {movie.overview}
         </p>
         <div className="mt-8 flex gap-2 items-center">
-          <button className="py-2 px-8 rounded-lg bg-red-500 text-white font-bold hover:bg-red-600 border-2 border-red-500 shadow-lg">
+          <button className="py-2 px-8 rounded-full bg-red-500 text-white font-bold hover:bg-red-600 border-2 border-red-500 shadow-lg">
             <Link
               to={`/movie/${movie.id}/${slug}`}
               className="flex items-center gap-2"
@@ -158,7 +158,7 @@ function HeroSection({ movies }: { movies: Media[] }) {
           <button
             type="button"
             onClick={handleClick}
-            className={`group py-2 px-8 rounded-lg backdrop-blur-md text-white font-bold border-2 border-white/10  ${isInWatchlist ? "bg-red-500 hover:bg-red-600" : "bg-white/10 hover:bg-white/20"} shadow-lg duration-300`}
+            className={`group py-2 px-8 rounded-full backdrop-blur-md text-white font-bold border-2 border-white/10  ${isInWatchlist ? "bg-red-500 hover:bg-red-600" : "bg-white/10 hover:bg-white/20"} shadow-lg duration-300`}
           >
             <span className="flex items-center gap-2">
               {isInWatchlist ? (

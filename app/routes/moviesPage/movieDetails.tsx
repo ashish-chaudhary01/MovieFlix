@@ -9,6 +9,7 @@ import CastRow from "~/components/CastRow";
 import { motion } from "motion/react";
 import { useWatchList } from "~/context/WatchlistContext";
 import { MdBookmarkAdded } from "react-icons/md";
+import { DetailsSkeleton } from "~/components/SkeletonCard";
 
 function MovieDetailsPage() {
   const params = useParams();
@@ -72,16 +73,11 @@ function MovieDetailsPage() {
     });
   };
 
-  //loading and error conditional statements
   if (isLoading) {
-    return (
-      <div className="h-screen flex justify-center items-center bg-background">
-        <ClipLoader color="red" />
-      </div>
-    );
+    return <DetailsSkeleton />;
   }
 
-  if (isError || !movie) {
+  if (isError) {
     return (
       <div className="h-screen flex justify-center items-center text-white bg-background">
         {error instanceof Error
@@ -98,7 +94,7 @@ function MovieDetailsPage() {
         <div className="absolute overflow-hidden z-0 inset-0">
           <img
             src={image_url}
-            alt={movie.title}
+            alt={movie?.title}
             className="absolute w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-linear-to-t from-[#07080a]/90 to-transparent"></div>
@@ -123,30 +119,30 @@ function MovieDetailsPage() {
         <div className="relative z-40 h-full flex flex-col md:flex-row py-20 items-end gap-8 px-6 md:px-12 lg:px-16">
           <img
             src={poster_url}
-            alt={movie.title}
+            alt={movie?.title}
             className="hidden md:block w-48 h-75 lg:w-64 lg:h-90 rounded-2xl shrink-0 object-fill border border-white/10"
           />
           <div className="max-w-3xl flex-1">
             <p className="uppercase text-xs md:text-sm text-red-400 mb-1 font-bold">
-              {movie.tagline}
+              {movie?.tagline}
             </p>
             <h1 className="text-4xl tracking-tight sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-2">
-              {movie.title}
+              {movie?.title}
             </h1>
 
             <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-gray-300 mb-4">
               <span className="flex gap-1.5 items-center">
                 <FaRegCalendarAlt size={13} />{" "}
-                {new Date(movie.release_date).getFullYear()}
+                {movie ? new Date(movie?.release_date).getFullYear() : "N/A"}
               </span>
               <span className="flex gap-1.5 items-center">
                 <WiTime3 size={18} /> {`${hours}h ${minutes}m`}
               </span>
-              <span>⭐ {Number(movie.vote_average).toFixed(1)}</span>
+              <span>⭐ {Number(movie?.vote_average).toFixed(1)}</span>
             </div>
 
             <div className="flex flex-wrap gap-4 mb-4">
-              {movie.genres?.map(
+              {movie?.genres?.map(
                 (genre: { id: string; name: string }, idx: number) => (
                   <span
                     key={idx}
@@ -158,7 +154,7 @@ function MovieDetailsPage() {
               )}
             </div>
             <p className="text-gray-300/90 md:text-lg max-w-2xl leading-relaxed">
-              {movie.overview}
+              {movie?.overview}
             </p>
 
             <motion.button
@@ -228,7 +224,7 @@ function MovieDetailsPage() {
         </div>
       )} */}
 
-      {movie.cast && <CastRow data={movie.cast} />}
+      {movie?.cast && <CastRow data={movie?.cast} />}
     </div>
   );
 }
