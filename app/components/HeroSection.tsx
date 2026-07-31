@@ -9,8 +9,13 @@ import { FaRegBookmark } from "react-icons/fa";
 import { FaPlay } from "react-icons/fa";
 import { useWatchList } from "~/context/WatchlistContext";
 import { MdBookmarkAdded } from "react-icons/md";
+import HeroSkeleton from "./HeroSkeleton";
 
 function HeroSection({ movies }: { movies: Media[] }) {
+  if (movies.length === 0) {
+    return <HeroSkeleton />;
+  }
+
   const herMovies = movies.slice(0, 8); //selecting trending 8 movies for hero section
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -25,7 +30,6 @@ function HeroSection({ movies }: { movies: Media[] }) {
 
   //movie at current index
   const movie = herMovies[currentIndex];
-  if (!movie) return null;
   const image_url = `https://image.tmdb.org/t/p/original${movie.backdrop_path}`;
 
   // slug for the url
@@ -78,15 +82,18 @@ function HeroSection({ movies }: { movies: Media[] }) {
       className="animate-[fadeIn_0.5s_ease_both] relative h-[80vh] md:h-screen overflow-hidden shadow-inner shadow-4xl select-none"
     >
       <img
+        loading="lazy"
+        decoding="async"
         src={image_url}
-        alt="image"
-        className="absolute inset-0 h-full object-cover w-full "
+        alt={movie.title}
+        className="absolute inset-0 h-full object-cover w-full"
       />
 
       {/* overlay divs */}
 
       <div className="absolute inset-0 z-10 bg-linear-to-t from-[#0a0c12] via-transparent to-black/30"></div>
       <div className="absolute inset-0 z-10 bg-linear-to-r from-[#0a0c12] via-transparent to-black/30"></div>
+      <div className="absolute inset-0 z-10 bg-linear-to-r from-[#0a0c12] to-transparent"></div>
 
       {/* slides dots */}
       <div className="z-20 absolute bottom-5 right-0 left-0 flex justify-center items-center gap-2 p-2">

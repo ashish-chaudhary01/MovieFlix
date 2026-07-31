@@ -70,7 +70,7 @@ const queryClient = new QueryClient({
 
 export default function App() {
   return (
-    <SkeletonTheme baseColor="#1e293b" highlightColor="#334155">
+    <SkeletonTheme baseColor="#27272a" highlightColor="#3f3f46">
       <QueryClientProvider client={queryClient}>
         <WatchlistProvider>
           <Sidebar />

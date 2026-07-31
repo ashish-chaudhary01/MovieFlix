@@ -3,10 +3,12 @@ import { IoMdStar } from "react-icons/io";
 import type { Media } from "~/types";
 import { useLocation } from "react-router";
 import { motion } from "motion/react";
+import { useState } from "react";
 
 function ContentCard({ data }: { data: Media }) {
   // using for dynamically sending the path to the content cards for back button
   const location = useLocation();
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   // images url if they dont have image.poster_path then use backdrop_path
   const image_url = `https://image.tmdb.org/t/p/w500${data.poster_path}`;
@@ -57,19 +59,20 @@ function ContentCard({ data }: { data: Media }) {
           whileHover={{
             scale: 1.05,
             opacity: 0.8,
+            border: "1px solid gray",
             boxShadow: "0 0 25px rgba(255,255,255,.15)",
           }}
 
-          className="relative w-full h-full rounded-2xl border overflow-hidden shadow-[1px_1px_5px_rgba(0,0,0,0.3)] border-white/20"
+          className="relative w-full h-full rounded-xl border overflow-hidden shadow-[1px_1px_5px_rgba(0,0,0,0.3)] border-white/20"
         >
           {/* movie tag */}
-          <div className="top-2 left-2 absolute px-1.5 py-0.75 text-[9px] font-extrabold shadow rounded-xs uppercase bg-red-600 text-white tracking-widest">
+          <div className="top-2 left-2 absolute z-10 px-1.5 py-0.75 text-[9px] font-extrabold shadow rounded-xs uppercase bg-red-600 text-white tracking-widest">
             {type === "tv" ? "series" : "movie"}
           </div>
 
           {/* rating tag */}
           <div
-            className={`top-2 right-2 absolute flex items-center gap-1 px-1.25 py-0.75 text-[9px] sm:text-[11px] font-extrabold shadow-2xl rounded uppercase bg-slate-900/90 ${ratingColor} tracking-wider`}
+            className={`top-2 right-2 absolute z-10 flex items-center gap-1 px-1.25 py-0.75 text-[9px] sm:text-[11px] font-extrabold shadow-2xl rounded uppercase bg-slate-900/90 ${ratingColor} tracking-wider`}
           >
             <IoMdStar />
             {Number(data.vote_average).toFixed(1)}
@@ -77,13 +80,18 @@ function ContentCard({ data }: { data: Media }) {
 
           {/* data container*/}
           {/* aspect 2/3 makes image responsive */}
-          <div className="w-full aspect-2/3">
+          <div className="relative w-full aspect-2/3">
+            {/* image skeleton div */}
+            {!imageLoaded && (
+              <div className="absolute inset-0 animate-pulse rounded-t-lg bg-zinc-800" />
+            )}
             <img
               loading="lazy"
               decoding="async"
+              onLoad={() => setImageLoaded(true)}
               src={image_url ? image_url : image_url2}
               alt={data.title || data.name}
-              className="h-full w-full object-cover rounded-t-lg"
+              className={`h-full w-full object-cover rounded-t-lg transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
             />
           </div>
           {/* description container */}

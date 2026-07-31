@@ -76,7 +76,7 @@ function SearchPage() {
     <div className="min-h-screen p-4 sm:p-6 text-white bg-">
       <h1 className="text-3xl font-bold mb-6">Search</h1>
       {/* search section  */}
-      <div className="max-w-3xl flex gap-3 shadow-2xl mb-6">
+      <div className="max-w-3xl flex gap-2 shadow-2xl mb-6">
         <input
           type="text"
           placeholder="Search movies and series..."
@@ -90,7 +90,7 @@ function SearchPage() {
           className={`py-3.5 px-4 rounded-lg text-sm text-white border-2 border-white/20 flex gap-1 items-center font-bold tracking-wider ${isFilterOpen ? "bg-red-600" : "bg-[#131313] hover:bg-white/20"}`}
         >
           <BiSlider size={20} />
-          <span>Filters</span>
+          <span className="hidden sm:block">Filters</span>
         </button>
       </div>
 

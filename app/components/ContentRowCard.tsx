@@ -2,8 +2,10 @@ import type { Media } from "~/types";
 import { IoMdStar } from "react-icons/io";
 import { Link } from "react-router";
 import { motion } from "motion/react";
+import { useState } from "react";
 
 function ContentRowCard({ media, type }: { media: Media; type: string }) {
+  const [imageLoaded, setImageLoaded] = useState(false);
   const image_url = `https://image.tmdb.org/t/p/w500${media.poster_path}`;
 
   // rating colors
@@ -42,24 +44,32 @@ function ContentRowCard({ media, type }: { media: Media; type: string }) {
           className="relative w-45 rounded-lg border border-white/10"
         >
           {/* movie tag */}
-          <div className="top-2 left-2 absolute px-1.5 py-0.75 text-[9px] font-extrabold shadow rounded-xs uppercase bg-red-600 text-white tracking-widest">
+          <div className="top-2 left-2 absolute z-10 px-1.5 py-0.75 text-[9px] font-extrabold shadow rounded-xs uppercase bg-red-600 text-white tracking-widest">
             {type}
           </div>
 
           {/* rating tag */}
           <div
-            className={`top-2 right-2 absolute flex items-center gap-1 px-1.25 py-0.75 text-[11px] font-bold shadow-2xl rounded uppercase bg-slate-900/90 ${ratingColor} tracking-wider`}
+            className={`top-2 right-2 absolute z-10 flex items-center gap-1 px-1.25 py-0.75 text-[11px] font-bold shadow-2xl rounded uppercase bg-slate-900/90 ${ratingColor} tracking-wider`}
           >
             <IoMdStar />
             {Number(media.vote_average).toFixed(1)}
           </div>
 
           {/* data container*/}
-          <img
-            src={image_url}
-            alt={media.title}
-            className="h-70 w-full object-fill rounded-t-lg"
-          />
+          <div className="relative">
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-zinc-800 rounded-t-lg animate-pulse "></div>
+            )}
+            <img
+              loading="lazy"
+              decoding="async"
+              onLoad={() => setImageLoaded(true)}
+              src={image_url}
+              alt={media.title}
+              className={`h-70 w-full object-cover rounded-t-lg transition-opacity duration-600 ${imageLoaded ? "opacity-100" : "opacity-0"} `}
+            />
+          </div>
           {/* description container */}
           <div className="px-2.5 pt-2 pb-3">
             <h2 className="text-white font-semibold text-sm line-clamp-1">

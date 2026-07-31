@@ -4,6 +4,8 @@ import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { useRef } from "react";
 import { Link } from "react-router";
 import ContentRowCard from "./ContentRowCard";
+import { AnimatePresence, easeInOut, motion } from "motion/react";
+import { RowSkeletonCard } from "./SkeletonCard";
 
 function ContentRow({
   title,
@@ -16,6 +18,15 @@ function ContentRow({
   type: string;
   link: string;
 }) {
+  // // skeleton for homepage content rows
+  // if (media.length === 0) {
+  //   return (
+  //     <div className="flex overflow-x-auto scroll-smooth no-scrollbar gap-3 py-6 px-2">
+  //       <div className="relative w-45 h-70 animate-pulse bg-zinc-800 rounded-xl"></div>
+  //     </div>
+  //   );
+  // }
+
   const sliderRef = useRef<HTMLDivElement>(null);
   //scroll right
   const scrollRight = () => {
@@ -64,18 +75,33 @@ function ContentRow({
         </div>
       </div>
 
-      {/* movie card */}
-
-      <div
-        ref={sliderRef}
-        className="flex overflow-x-auto scroll-smooth no-scrollbar gap-3 py-6 px-2"
-      >
-        {media?.map((media: Media) => (
-          <>
-            <ContentRowCard key={media.id} media={media} type={type} />
-          </>
-        ))}
-      </div>
+      {/* skeleton cards and content card */}
+      <AnimatePresence mode="wait">
+        {media.length === 0 ? (
+          <motion.div
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: easeInOut }}
+            className="flex overflow-x-auto scroll-smooth no-scrollbar gap-3 py-6 px-2"
+          >
+            <RowSkeletonCard />
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: easeInOut }}
+            ref={sliderRef}
+            className="flex overflow-x-auto scroll-smooth no-scrollbar gap-3 py-6 px-2"
+          >
+            {media?.map((media: Media) => (
+              <>
+                <ContentRowCard key={media.id} media={media} type={type} />
+              </>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

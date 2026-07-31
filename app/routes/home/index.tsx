@@ -62,21 +62,13 @@ function HomePage() {
     queryFn: () => fetchAsianTvShows(),
   });
 
-  // loader
-  if (isLoading && TrendingMovies.length === 0) {
-    return (
-      <div className="h-screen flex justify-center items-center">
-        <ClipLoader color="red" />
-      </div>
-    );
+  if (isTrendingThisWeekError) {
+    return <p>{trendingThisWeekError.message}</p>;
   }
+
   // error
   if (isError) {
     return <p>{error.message}</p>;
-  }
-
-  if (isTrendingThisWeekError) {
-    return <p>{trendingThisWeekError.message}</p>;
   }
 
   return (
