@@ -8,4 +8,5 @@ export default [
   route("/tv", "routes/tv/index.tsx"),
   route("/tv/:id/:slug", "routes/tv/seriesDetails.tsx"),
   route("/watchlist", "routes/watchlist/index.tsx"),
+  route("/cast/:id", "routes/castPage/index.tsx"),
 ] satisfies RouteConfig;

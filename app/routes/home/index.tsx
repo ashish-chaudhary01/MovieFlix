@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { ClipLoader } from "react-spinners";
 import {
   fetchTrendingMovies,
   fetchTrendingThisWeekMovies,
@@ -15,7 +14,6 @@ function HomePage() {
   // trending movies query
   const {
     data: TrendingMovies = [],
-    isLoading,
     isError,
     error,
   } = useQuery({
@@ -26,7 +24,6 @@ function HomePage() {
   // trending movies this week query
   const {
     data: trendingMoviesThisWeekData,
-    isLoading: isTrendingThisWeekLoading,
     isError: isTrendingThisWeekError,
     error: trendingThisWeekError,
   } = useQuery({

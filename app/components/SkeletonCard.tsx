@@ -122,15 +122,22 @@ export function DetailsSkeleton() {
       </div>
 
       {/* Cast Row */}
-      <div className="px-6 sm:px-14 lg:px-16 pb-12">
-        <div className="h-7 w-40 rounded bg-zinc-800 animate-pulse mb-6" />
+      <div className="py-6 pl-6">
+        <div className="h-8 w-40 rounded-lg bg-zinc-800 animate-pulse py-1 mb-10" />
 
         <div className="flex gap-4 overflow-hidden">
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="min-w-32">
-              <div className="w-32 h-44 rounded-xl bg-zinc-800 animate-pulse mb-3" />
-              <div className="h-4 w-24 rounded bg-zinc-800 animate-pulse mb-2" />
-              <div className="h-3 w-16 rounded bg-zinc-800 animate-pulse" />
+            <div>
+              <div
+                key={i}
+                className="relative h-25 w-25 sm:h-40 sm:w-40 rounded-full"
+              >
+                <div className="h-full w-full rounded-full bg-zinc-800 animate-pulse mb-3" />
+              </div>
+              <div className="flex flex-col gap-2 items-center justify-center mt-2">
+                <div className="h-4 w-20 rounded-lg bg-zinc-800 animate-pulse" />
+                <div className="h-3 w-14 rounded-lg bg-zinc-800 animate-pulse" />
+              </div>
             </div>
           ))}
         </div>

@@ -4,12 +4,12 @@ import { fetchMovieDetails } from "~/services/api";
 import { useQuery } from "@tanstack/react-query";
 import { FaRegCalendarAlt, FaArrowLeft, FaRegBookmark } from "react-icons/fa";
 import { WiTime3 } from "react-icons/wi";
-import { ClipLoader } from "react-spinners";
 import CastRow from "~/components/CastRow";
 import { motion } from "motion/react";
 import { useWatchList } from "~/context/WatchlistContext";
 import { MdBookmarkAdded } from "react-icons/md";
 import { DetailsSkeleton } from "~/components/SkeletonCard";
+import ContentRow from "~/components/ContentRow";
 
 function MovieDetailsPage() {
   const params = useParams();
@@ -19,6 +19,7 @@ function MovieDetailsPage() {
     params.id ?? location.pathname.split("/").filter(Boolean).pop();
   const movieId = routeId ? String(routeId) : undefined;
 
+  // for back button
   const state = (location.state as { from?: string } | null) ?? null;
   const from = state?.from ?? "/";
 
@@ -102,6 +103,7 @@ function MovieDetailsPage() {
           <div className="absolute inset-0 bg-linear-to-b from-transparent to-[#07080a]/90"></div>
         </div>
 
+        {/* back button */}
         <div className="absolute z-50 top-0 left-0 right-0 pt-10 pl-5 md:pl-15 pb-5">
           <Link
             className="group rounded-full px-6 py-2.5 bg-black/55 border border-white/20 text-sm font-semibold text-gray-200 inline-flex gap-2 items-center shadow-sm hover:shadow-md"
@@ -179,7 +181,7 @@ function MovieDetailsPage() {
         </div>
       </div>
 
-      {/* 3. Streaming Player Section with Server Tabs */}
+      {/* Streaming Player Section with Server Tabs */}
       <div className="relative px-6 sm:px-14 lg:px-16 pb-10 max-w-7xl mx-auto">
         <div className="flex flex-wrap gap-2 mb-4 p-2 rounded-xl">
           <span className="text-gray-400 self-center mr-2 text-sm font-semibold">
@@ -209,22 +211,18 @@ function MovieDetailsPage() {
         </div>
       </div>
 
-      {/* YouTube Trailers */}
-      {/* {movie.trailer && (
-        <div className="pt-4 pb-10 px-8 max-w-5xl mx-auto flex flex-col justify-center">
-          <h3 className="text-white text-xl font-bold mb-4">
-            Official Trailer
-          </h3>
-          <iframe
-            className="aspect-video w-full rounded-2xl border-2 border-white/10"
-            src={`https://www.youtube.com/embed/${movie.trailer.key}`}
-            allowFullScreen
-            title={movie.trailer.name}
-          />
-        </div>
-      )} */}
-
+      {/* cast  */}
       {movie?.cast && <CastRow data={movie?.cast} />}
+
+      {/* recommended movies */}
+      {movie?.recommendations && (
+        <ContentRow
+          title="Recommended Movies"
+          media={movie.recommendations}
+          type="Movie"
+          link="/movies"
+        />
+      )}
     </div>
   );
 }

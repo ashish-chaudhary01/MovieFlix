@@ -36,6 +36,7 @@ export interface TMDBMovie {
   release_date: string;
   runtime: string;
   genres: Genre[];
+  recommendations: TMDBResponse;
   videos: { results: Trailer[] };
   credits: { cast: CastData[] };
 }
@@ -52,6 +53,7 @@ export interface MovieDetails {
   release_date: string;
   runtime: string;
   genres: [];
+  recommendations: Media[];
   trailer?: Trailer;
   cast?: CastData[];
 }
@@ -126,4 +128,22 @@ export type CastData = {
   character: string;
   profile_path: string;
   known_for_department: string;
+};
+
+// tmdb cast response type
+export type castDetails = {
+  id: number;
+  name: string;
+  biography: string;
+  birthday: string;
+  deathday: string;
+  place_of_birth: string;
+  profile_path: string;
+  known_for_department: string;
+  popularity: number;
+};
+
+// cast know for(his movies and series)
+export type castKnownFor = {
+  cast: Media[];
 };

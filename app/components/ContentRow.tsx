@@ -18,15 +18,6 @@ function ContentRow({
   type: string;
   link: string;
 }) {
-  // // skeleton for homepage content rows
-  // if (media.length === 0) {
-  //   return (
-  //     <div className="flex overflow-x-auto scroll-smooth no-scrollbar gap-3 py-6 px-2">
-  //       <div className="relative w-45 h-70 animate-pulse bg-zinc-800 rounded-xl"></div>
-  //     </div>
-  //   );
-  // }
-
   const sliderRef = useRef<HTMLDivElement>(null);
   //scroll right
   const scrollRight = () => {
@@ -43,8 +34,6 @@ function ContentRow({
       behavior: "smooth",
     });
   };
-
-  console.log(sliderRef);
 
   return (
     <section className="py-8 px-4 ">

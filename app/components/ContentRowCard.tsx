@@ -37,7 +37,10 @@ function ContentRowCard({ media, type }: { media: Media; type: string }) {
 
   return (
     <>
-      <Link to={`/${redirect}/${media.id}/${slug}`}>
+      <Link
+        to={`/${redirect}/${media.id}/${slug}`}
+        state={{ from: location.pathname }}
+      >
         <motion.div
           whileHover={{ scale: 1.05, border: "1.5px solid gray", opacity: 0.8 }}
           transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}

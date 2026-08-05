@@ -2,7 +2,10 @@ const API_URL = import.meta.env.VITE_API_URL;
 const API_TOKEN = import.meta.env.VITE_API_TOKEN;
 import type {
   CastData,
+  castDetails,
+  castKnownFor,
   Genre,
+  Media,
   MovieDetails,
   SeriesDetails,
   TMDBMovie,
@@ -88,7 +91,7 @@ export async function fetchAsianTvShows() {
 export async function fetchMovieDetails(id?: string) {
   if (!id) throw new Error("Movie id is missing");
   const data = await apiFetch<TMDBMovie>(
-    `/movie/${id}?append_to_response=videos,credits`,
+    `/movie/${id}?append_to_response=videos,credits,recommendations`,
   );
   // extracting trailer
   const trailer = data.videos.results.find(
@@ -115,7 +118,7 @@ export async function fetchMovieDetails(id?: string) {
     release_date: data.release_date,
     runtime: data.runtime,
     genres: data.genres ?? [],
-
+    recommendations: data.recommendations.results,
     trailer: trailer
       ? {
           id: trailer.id,
@@ -214,4 +217,15 @@ export async function fetchSeriesDetails(id?: string) {
       : null,
     cast: cast,
   } as SeriesDetails;
+}
+
+// get cast details and his combined_credits(his movies and series)
+export async function fetchCastDetails(id?: string) {
+  const castDetails = await apiFetch<castDetails>(
+    `/person/${id}?language=en-US`,
+  );
+  const castCombinedCredits = await apiFetch<castKnownFor>(
+    `/person/${id}/combined_credits`,
+  );
+  return { castDetails, castCombinedCredits };
 }
