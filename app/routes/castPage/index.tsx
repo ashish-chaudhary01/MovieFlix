@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { Link, useLocation, useParams } from "react-router";
 import ContentGrid from "~/components/ContentGrid";
@@ -8,6 +9,7 @@ import { fetchCastDetails } from "~/services/api";
 function CastPage() {
   const { id } = useParams(); //cast id
   const location = useLocation();
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   // for back button
   const state = (location.state as { from?: string | null }) ?? null;
@@ -62,11 +64,16 @@ function CastPage() {
         {/* left container */}
         <div className="flex pt-10 justify-center">
           {/* image container */}
-          <div className="h-100 sm:h-120 w-65 sm:w-75 rounded-2xl">
+          <div className="relative h-100 sm:h-120 w-65 sm:w-75 rounded-2xl">
+            {/* cast image skeleton */}
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-zinc-800 animate-pulse rounded-2xl" />
+            )}
             <img
               src={image_url}
               alt={cast?.castDetails.name}
-              className="h-full w-full object-cover rounded-2xl"
+              onLoad={() => setImageLoaded(true)}
+              className={`h-full w-full object-cover rounded-2xl transition-opacity duration-500 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
             />
           </div>
         </div>
