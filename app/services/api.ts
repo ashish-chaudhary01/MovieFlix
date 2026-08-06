@@ -87,6 +87,49 @@ export async function fetchAsianTvShows() {
   return asianTvShows;
 }
 
+// genres list for hero section
+export async function fetchGenresList(id?: string) {
+  const res = await fetch(`${API_URL}/genre/movie/list`, {
+    headers: {
+      Authorization: `Bearer ${API_TOKEN}`,
+      Accept: "application/json",
+    },
+  });
+  if (!res.ok) throw new Error("Failed To fetch genres list");
+  const data = await res.json();
+  const genres = data.genres.map((genre: Genre) => ({
+    id: genre.id,
+    name: genre.name,
+  }));
+  return genres;
+}
+
+// all trending movies or series for search page
+export async function fetchAllTrending(type: string, page: number) {
+  const data = await apiFetch<TMDBResponse>(
+    `/trending/${type}/week?language=en-US&page=${page}`,
+  );
+  const trendingAll = data.results.map(mapMedia);
+  return {
+    results: trendingAll,
+    page: data.page,
+    total_pages: data.total_pages,
+  };
+}
+
+// search movies or tv shows
+export async function fetchSearchResults(query: string, page: number) {
+  const data = await apiFetch<TMDBResponse>(
+    `/search/multi?query=${encodeURIComponent(query)}&page=${page}`,
+  );
+  const searchData = data.results.map(mapMedia);
+  return {
+    results: searchData,
+    page: data.page,
+    total_pages: data.total_pages,
+  };
+}
+
 // movie details
 export async function fetchMovieDetails(id?: string) {
   if (!id) throw new Error("Movie id is missing");
@@ -133,53 +176,10 @@ export async function fetchMovieDetails(id?: string) {
   } as MovieDetails;
 }
 
-// genres list for hero section
-export async function fetchGenresList(id?: string) {
-  const res = await fetch(`${API_URL}/genre/movie/list`, {
-    headers: {
-      Authorization: `Bearer ${API_TOKEN}`,
-      Accept: "application/json",
-    },
-  });
-  if (!res.ok) throw new Error("Failed To fetch genres list");
-  const data = await res.json();
-  const genres = data.genres.map((genre: Genre) => ({
-    id: genre.id,
-    name: genre.name,
-  }));
-  return genres;
-}
-
-// all trending movies or series for search page
-export async function fetchAllTrending(type: string, page: number) {
-  const data = await apiFetch<TMDBResponse>(
-    `/trending/${type}/week?language=en-US&page=${page}`,
-  );
-  const trendingAll = data.results.map(mapMedia);
-  return {
-    results: trendingAll,
-    page: data.page,
-    total_pages: data.total_pages,
-  };
-}
-
-// search movies or tv shows
-export async function fetchSearchResults(query: string, page: number) {
-  const data = await apiFetch<TMDBResponse>(
-    `/search/multi?query=${encodeURIComponent(query)}&page=${page}`,
-  );
-  const searchData = data.results.map(mapMedia);
-  return {
-    results: searchData,
-    page: data.page,
-    total_pages: data.total_pages,
-  };
-}
-
 // series details
 export async function fetchSeriesDetails(id?: string) {
   const data = await apiFetch<TMDBSeries>(
-    `/tv/${id}?append_to_response=videos,credits`,
+    `/tv/${id}?append_to_response=videos,credits,recommendations`,
   );
   const trailer = data.videos.results.find(
     (v: Trailer) => v.type === "Trailer" && v.site === "YouTube",
@@ -206,6 +206,7 @@ export async function fetchSeriesDetails(id?: string) {
     number_of_seasons: data.number_of_seasons,
     seasons: data.seasons,
     genres: data.genres ?? [],
+    recommendations: data.recommendations.results,
     trailer: trailer
       ? {
           id: trailer.id,

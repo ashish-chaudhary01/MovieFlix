@@ -10,6 +10,7 @@ import { MdBookmarkAdded } from "react-icons/md";
 import { FaRegBookmark } from "react-icons/fa";
 import { useState } from "react";
 import { DetailsSkeleton } from "~/components/SkeletonCard";
+import ContentRow from "~/components/ContentRow";
 
 function SeriesDetailsPage() {
   const params = useParams();
@@ -26,6 +27,10 @@ function SeriesDetailsPage() {
   const [activeServer, setActiveServer] = useState<string>("vidnest");
   const [season, setSeason] = useState(1);
   const [episode, setEpisode] = useState(1);
+  const [imageLoaded, setImageLoaded] = useState({
+    poster: false,
+    backdrop: false,
+  });
 
   // query series details
   const {
@@ -47,7 +52,7 @@ function SeriesDetailsPage() {
 
   //iamges url
   const image_url = `https://image.tmdb.org/t/p/original${series?.backdrop_path}`;
-  const poster_url = `https://image.tmdb.org/t/p/original${series?.poster_path}`;
+  const poster_url = `https://image.tmdb.org/t/p/w342${series?.poster_path}`;
 
   //servers for movie and tv shows streaming
   const serverUrls: Record<string, string> = {
@@ -96,10 +101,17 @@ function SeriesDetailsPage() {
       {/* background image container */}
       <div className="relative pt-32 pb-20 w-full min-h-[70vh]">
         <div className="absolute overflow-hidden z-0 inset-0">
+          {/* backdrop image skeleton until it is not fully loaded */}
+          {!imageLoaded.backdrop && (
+            <div className="absolute inset-0 bg-zinc-800 animate-pulse" />
+          )}
           <img
             src={image_url}
             alt={series.name}
-            className="absolute w-full h-full object-cover"
+            onLoad={() =>
+              setImageLoaded((prev) => ({ ...prev, backdrop: true }))
+            }
+            className={`absolute w-full h-full object-cover transition-opacity duration-400 ${imageLoaded.backdrop ? "opacity-100" : "opacity-0"}`}
           />
           <div className="absolute inset-0 bg-linear-to-t from-[#07080a]/90 to-transparent"></div>
           <div className="absolute inset-0 bg-linear-to-r from-[#07080a]/90 to-transparent"></div>
@@ -121,11 +133,22 @@ function SeriesDetailsPage() {
 
         {/* movie description */}
         <div className="relative z-50 h-full flex flex-col md:flex-row py-20 items-end gap-8 px-6 md:px-12 lg:px-16">
-          <img
-            src={poster_url}
-            alt={series.name}
-            className="hidden md:block w-48 h-75 lg:w-64 lg:h-90 z-10 rounded-2xl shrink-0 object-fill border border-white/10"
-          />
+          {/* poster image */}
+          <div className="relative hidden md:block w-48 h-80 lg:w-64 lg:h-90 z-10 rounded-2xl shrink-0 border border-white/10">
+            {/* skeleton of poster image */}
+            {!imageLoaded.poster && (
+              <div className="absolute inset-0 bg-zinc-800 animate-pulse rounded-2xl" />
+            )}
+            <img
+              src={poster_url}
+              alt={series.name}
+              onLoad={() =>
+                setImageLoaded((prev) => ({ ...prev, poster: true }))
+              }
+              className={`h-full w-full rounded-2xl transition-opacity object-cover duration-400 ${imageLoaded.poster ? "opacity-100" : "opacity-0"}`}
+            />
+          </div>
+          {/* right container */}
           <div className="max-w-3xl flex-1">
             <p className="uppercase text-xs md:text-sm text-red-400 mb-1 font-bold drop-shadow-md">
               {series.tagline}
@@ -268,19 +291,18 @@ function SeriesDetailsPage() {
         </div>
       </div>
 
-      {/* trailers , cast cards and related contentcards
-      {series.trailer && (
-        <div className="pt-8 pb-10 px-8 sm:px-12 md:px-14 lg:px-16 w-full flex justify-center items-center">
-          <iframe
-            className="aspect-video rounded-2xl shadow-2xl border-2 border-white/10"
-            src={`https://www.youtube.com/embed/${series.trailer.key}`}
-            allowFullScreen
-            title={series.trailer.name}
-          />
-        </div>
-      )} */}
       {/* cast row */}
       {series.cast && <CastRow data={series.cast} />}
+
+      {/* recommended series */}
+      {series?.recommendations && (
+        <ContentRow
+          title="Recommended Series"
+          media={series.recommendations}
+          type="Series"
+          link="/tv"
+        />
+      )}
     </div>
   );
 }

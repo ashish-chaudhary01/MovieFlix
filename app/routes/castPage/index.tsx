@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { FaArrowLeft } from "react-icons/fa";
 import { Link, useLocation, useParams } from "react-router";
 import ContentGrid from "~/components/ContentGrid";
+import { CastPageSkeleton } from "~/components/SkeletonCard";
 import { fetchCastDetails } from "~/services/api";
 
 function CastPage() {
@@ -16,6 +17,7 @@ function CastPage() {
     data: cast,
     isLoading,
     isError,
+    error,
   } = useQuery({
     queryKey: ["cast-detail", id],
     queryFn: () => fetchCastDetails(id as string),
@@ -23,8 +25,21 @@ function CastPage() {
   });
 
   const image_url = cast
-    ? `https://image.tmdb.org/t/p/w500${cast.castDetails.profile_path}`
+    ? `https://image.tmdb.org/t/p/w780${cast.castDetails.profile_path}`
     : "";
+
+  if (isLoading) {
+    return <CastPageSkeleton />;
+  }
+
+  if (isError) {
+    return (
+      <div className="max-w-5xl mx-auto mt-20 px-4 py-10 text-center">
+        <h2 className="text-4xl font-bold text-white drop-shadow-2xl">Error</h2>
+        <p className="mt-2 text-sm text-gray-200">{error.message}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen md:pl-10">

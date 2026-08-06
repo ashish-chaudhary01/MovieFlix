@@ -5,7 +5,7 @@ import type { CastData } from "~/types";
 function CastCard({ data }: { data: CastData }) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const image_url = data.profile_path
-    ? `https://image.tmdb.org/t/p/w500${data.profile_path}`
+    ? `https://image.tmdb.org/t/p/w342${data.profile_path}`
     : "/no-image.png";
 
   return (

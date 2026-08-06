@@ -6,7 +6,7 @@ import { useState } from "react";
 
 function ContentRowCard({ media, type }: { media: Media; type: string }) {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const image_url = `https://image.tmdb.org/t/p/w500${media.poster_path}`;
+  const image_url = `https://image.tmdb.org/t/p/w342${media.poster_path}`;
 
   // rating colors
   const rating = Number(Number(media.vote_average).toFixed(1));

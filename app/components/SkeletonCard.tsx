@@ -123,7 +123,8 @@ export function DetailsSkeleton() {
 
       {/* Cast Row */}
       <div className="py-6 pl-6">
-        <div className="h-8 w-40 rounded-lg bg-zinc-800 animate-pulse py-1 mb-10" />
+        {/*  */}
+        <div className="h-8 w-40 rounded-xl bg-zinc-800 animate-pulse py-1 mb-8" />
 
         <div className="flex gap-4 overflow-hidden">
           {Array.from({ length: 8 }).map((_, i) => (
@@ -140,6 +141,63 @@ export function DetailsSkeleton() {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+      {/* recommended skeleton */}
+      <div className="mt-10 py-6 px-6">
+        <div className="h-8 w-40 rounded-xl bg-zinc-800 animate-pulse mb-10" />
+        <div className="flex overflow-x-auto scroll-smooth no-scrollbar gap-3 ">
+          <RowSkeletonCard />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// skeleton for cast page
+export function CastPageSkeleton() {
+  return (
+    <div className="relative min-h-screen md:pl-10">
+      {/* Back Button */}
+      <div className="absolute z-50 top-0 left-0 right-0 pt-10 pl-5 md:pl-15 pb-5">
+        <div className="h-11 w-28 rounded-full bg-zinc-800 animate-pulse" />
+      </div>
+      {/* cast hero section skelton */}
+      <div className="min-h-screen flex flex-col md:flex-row gap-6 pt-20">
+        {/* left container skeleton */}
+        <div className="flex pt-10 justify-center">
+          {/* image skeleton */}
+          <div className="h-100 sm:h-120 w-65 sm:w-75 rounded-2xl bg-zinc-800 animate-pulse" />
+        </div>
+        {/* right container */}
+        <div className="flex-1 max-w-3xl px-6 py-2">
+          {/* name */}
+          <div className="bg-zinc-800 h-10 w-60 rounded-xl animate-pulse" />
+          {/* birthdate,birthplace,department */}
+          <div className="flex flex-wrap gap-3 items-center mt-4">
+            <div className="bg-zinc-800 h-4 w-10 rounded-lg animate-pulse" />
+            <div className="bg-zinc-800 h-4 w-10 rounded-lg animate-pulse" />
+            <div className="bg-zinc-800 h-4 w-10 rounded-lg animate-pulse" />
+          </div>
+          {/* biograpgy container */}
+          <div className="mt-4">
+            {/* title */}
+            <div className="h-8 w-30 bg-zinc-800 rounded-xl mb-4 animate-pulse" />
+            {/* biography content */}
+            <div className="h-6 w-[90%] bg-zinc-800 rounded-lg mb-4 animate-pulse" />
+            <div className="h-6 w-[85%] bg-zinc-800 rounded-lg mb-4 animate-pulse" />
+            <div className="h-6 w-[75%] bg-zinc-800 rounded-lg mb-4 animate-pulse" />
+            <div className="h-6 w-[60%] bg-zinc-800 rounded-lg mb-4 animate-pulse" />
+            <div className="h-6 w-[25%] bg-zinc-800 rounded-lg mb-4 animate-pulse" />
+          </div>
+        </div>
+      </div>
+      {/* known for skelton */}
+      <div className="pt-10 px-4 sm:pl-0 sm:pr-4 pb-10">
+        <div className="mb-4 animate-pulse bg-zinc-800 h-6 w-30 rounded-lg" />
+        {/* media skeleton */}
+        <div className="grid gap-3 sm:gap-4 grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7">
+          <SkeletonCard />
         </div>
       </div>
     </div>

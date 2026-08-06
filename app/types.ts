@@ -83,6 +83,7 @@ export interface TMDBSeries {
   number_of_episodes: number;
   seasons: Season[];
   genres: Genre[];
+  recommendations: TMDBResponse;
   videos: { results: Trailer[] };
   credits: { cast: CastData[] };
 }
@@ -101,6 +102,7 @@ export interface SeriesDetails {
   number_of_episodes: number;
   seasons: Season[];
   genres: Genre[];
+  recommendations: Media[];
   trailer?: Trailer;
   cast?: CastData[];
 }

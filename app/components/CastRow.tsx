@@ -30,7 +30,7 @@ function CastRow({ data }: { data: CastData[] }) {
           Top Cast
         </h2>
 
-        <div className="flex gap-1 items-center md:mr-4">
+        <div className="flex gap-1 items-center mr-4 md:mr-8">
           {/* left scroll button */}
           <button
             onClick={scrollLeft}
@@ -52,7 +52,7 @@ function CastRow({ data }: { data: CastData[] }) {
 
       <div
         ref={sliderRef}
-        className="flex overflow-x-auto scroll-smooth no-scrollbar gap-3 py-6 cursor-grab "
+        className="flex overflow-x-auto scroll-smooth no-scrollbar gap-3 py-4"
       >
         {data?.map((c: CastData) => (
           <CastCard key={c.id} data={c} />

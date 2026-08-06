@@ -49,7 +49,7 @@ function MovieDetailsPage() {
     ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
     : "";
   const poster_url = movie
-    ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
     : "";
 
   // movie playtime

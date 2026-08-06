@@ -11,8 +11,8 @@ function ContentCard({ data }: { data: Media }) {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   // images url if they dont have image.poster_path then use backdrop_path
-  const image_url = `https://image.tmdb.org/t/p/w500${data.poster_path}`;
-  const image_url2 = `https://image.tmdb.org/t/p/w500${data.backdrop_path}`;
+  const image_url = `https://image.tmdb.org/t/p/w342${data.poster_path}`;
+  const image_url2 = `https://image.tmdb.org/t/p/w342${data.backdrop_path}`;
 
   // rating colors
   const rating = Number(Number(data.vote_average).toFixed(1));

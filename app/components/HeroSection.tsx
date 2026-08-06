@@ -15,7 +15,7 @@ function HeroSection({ movies }: { movies: Media[] }) {
   if (movies.length === 0) {
     return <HeroSkeleton />;
   }
-
+  const [imageLoaded, setImageLoaded] = useState(false);
   const herMovies = movies.slice(0, 8); //selecting trending 8 movies for hero section
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -79,14 +79,18 @@ function HeroSection({ movies }: { movies: Media[] }) {
   return (
     <section
       key={currentIndex}
-      className="animate-[fadeIn_0.5s_ease_both] relative h-[80vh] md:h-screen overflow-hidden shadow-inner shadow-4xl select-none"
+      className="animate-[fadeIn_0.5s_ease-in_both] relative h-[80vh] md:h-screen overflow-hidden shadow-inner shadow-4xl select-none"
     >
+      {!imageLoaded && (
+        <div className="absolute inset-0 bg-zinc-800 animate-pulse" />
+      )}
       <img
         loading="lazy"
         decoding="async"
+        onLoad={() => setImageLoaded(true)}
         src={image_url}
         alt={movie.title}
-        className={`absolute inset-0 h-full object-cover w-full transition-opacity duration-400`}
+        className={`absolute inset-0 h-full object-cover w-full transition-opacity duration-400 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
       />
 
       {/* overlay divs */}
