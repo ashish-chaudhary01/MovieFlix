@@ -26,9 +26,9 @@ function CastPage() {
     enabled: Boolean(id),
   });
 
-  const image_url = cast
+  const image_url = cast?.castDetails.profile_path
     ? `https://image.tmdb.org/t/p/w780${cast.castDetails.profile_path}`
-    : "";
+    : "/no-image.jpg";
 
   if (isLoading) {
     return <CastPageSkeleton />;
@@ -89,10 +89,10 @@ function CastPage() {
               {cast?.castDetails.known_for_department}
             </span>
             <span className="px-3 py-1.5 border border-white/20 bg-white/10 hover:bg-white/20 backdrop-blur-2xl text-gray-200 font-semibold text-sm rounded-full">
-              {cast?.castDetails.birthday}
+              {cast?.castDetails.birthday || "N/A"}
             </span>
             <span className="px-3 py-1.5 border border-white/20 bg-white/10 hover:bg-white/20 backdrop-blur-2xl text-gray-200 font-semibold text-sm rounded-full">
-              {cast?.castDetails.place_of_birth}
+              {cast?.castDetails.place_of_birth || "N/A"}
             </span>
           </div>
           {/* biograpgy container */}
@@ -104,7 +104,7 @@ function CastPage() {
             </h2>
             {/* biography content */}
             <p className="text-md text-gray-200 font-semibold">
-              {cast?.castDetails.biography}
+              {cast?.castDetails.biography || "N/A"}
             </p>
           </div>
         </div>

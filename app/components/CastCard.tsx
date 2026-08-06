@@ -6,7 +6,7 @@ function CastCard({ data }: { data: CastData }) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const image_url = data.profile_path
     ? `https://image.tmdb.org/t/p/w342${data.profile_path}`
-    : "/no-image.png";
+    : "/no-image.jpg";
 
   return (
     <Link to={`/cast/${data.id}`} state={{ from: location.pathname }}>

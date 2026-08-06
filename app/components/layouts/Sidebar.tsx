@@ -1,5 +1,5 @@
 import { IoHome } from "react-icons/io5";
-import { FaPlay } from "react-icons/fa";
+import { FaPlay, FaUserCircle } from "react-icons/fa";
 import { BiMoviePlay } from "react-icons/bi";
 import { FiTv } from "react-icons/fi";
 import { IoSearch } from "react-icons/io5";
